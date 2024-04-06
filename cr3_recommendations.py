@@ -72,7 +72,7 @@ if address and address != 'None':
             #filtered_supported_by_user = supported_by_user[supported_by_user['PayoutAddress'].isin(cr3_df['PayoutAddress'])]
 
             # Debugging
-            matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'ProjectName']], on='PayoutAddress', how='inner')
+            matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name']], on='PayoutAddress', how='inner')
             st.markdown("You have previously donated to the payout address used by these projects:")
             st.dataframe(matched_projects['Project Name'])            
 
