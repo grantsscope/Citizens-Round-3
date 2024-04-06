@@ -18,12 +18,12 @@ if address and address != 'None':
         else:
 
             # Load all donations data on Grants Stack
-            gs_donations_df = pd.read_csv('./gs donations.csv')
+            gs_donations_df = pd.read_csv('gs donations.csv')
             # Convert voter to lower case for ease of comparison
             gs_donations_df['Voter'] = gs_donations_df['Voter'].str.lower()
 
             #load the citizens round 3 projects
-            cr3_df = pd.read_csv('./summarized_cr3_projects.csv')
+            cr3_df = pd.read_csv('summarized_cr3_projects.csv')
             # Convert Payout Address to lower case for ease of comparison
             cr3_df['PayoutAddress'] = cr3_df['PayoutAddress'].str.lower()
 
