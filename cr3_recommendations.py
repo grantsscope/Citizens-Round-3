@@ -76,7 +76,7 @@ if address and address != 'None':
             st.markdown("You have previously donated to the payout address used by these projects:")
             st.dataframe(matched_projects)            
 
-            recommended_addresses = filtered_top_supports[~filtered_top_supports['PayoutAddress'].isin(filtered_supported_by_user)].head(10)
+            recommended_addresses = filtered_top_supports[~filtered_top_supports['PayoutAddress'].isin(filtered_supported_by_user['PayoutAddress'])].head(10)
 
             recommended_projects = recommended_addresses.merge(cr3_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
 
