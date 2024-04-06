@@ -46,7 +46,14 @@ filtered_top_supports = top_supports_by_other_voters[top_supports_by_other_voter
 # Find projects supported by user
 supported_by_user = gs_donations_df[gs_donations_df['Voter'] == address]['PayoutAddress'].unique()
 # Filter by those participating in CR3
-filtered_supported_by_user = supported_by_user[supported_by_user['PayoutAddress'].isin(cr3_df['PayoutAddress'])]
+# Create a boolean mask
+mask = supported_by_user['PayoutAddress'].isin(cr3_df['PayoutAddress'])
+
+# Apply the mask to filter the DataFrame
+filtered_supported_by_user = supported_by_user[mask]
+
+#filtered_supported_by_user = supported_by_user[supported_by_user['PayoutAddress'].isin(cr3_df['PayoutAddress'])]
+
 
 recommended_addresses = filtered_top_supports[~filtered_top_supports['PayoutAddress'].isin(filtered_supported_by_user)].head(10)
 
