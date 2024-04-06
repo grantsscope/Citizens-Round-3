@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import streamlit.components.v1 as components
@@ -30,7 +29,7 @@ unique_other_voters = other_voters['Voter'].drop_duplicates()
 
 #Step 3: Find top citizen round 3 projects supported by other voters
 # Find projects supported by other voters
-filtered_by_voters = gs_donations_df[df_lower['Voter'].isin(unique_other_voters)]
+filtered_by_voters = gs_donations_df[gs_donations_df['Voter'].isin(unique_other_voters)]
 
 # Sort by amount donated
 top_supports_by_other_voters = filtered_by_voters.groupby('PayoutAddress') \
