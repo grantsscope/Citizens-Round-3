@@ -80,4 +80,5 @@ if address and address != 'None':
 
             recommended_projects = recommended_addresses.merge(cr3_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
 
+            st.dataframe(recommended_addresses)
             st.dataframe(recommended_projects[['Project Name']])
