@@ -30,10 +30,11 @@ if address and address != 'None':
 
             #Step 1: Find top 5 grantees donated to by the user
             top_addresses = gs_donations_df[gs_donations_df['Voter'] == address].groupby('PayoutAddress').agg({'AmountUSD': 'sum'}).reset_index().sort_values('AmountUSD', ascending=False).head(5)
+            top_projects = pd.merge(top_addresses, gs_donations_df[['PayoutAddress', 'ProjectName']].drop_duplicates(), on='PayoutAddress', how='left')
 
             # Debugging
             st.markdown("Your top supported projects:")
-            st.dataframe(top_addresses)            
+            st.dataframe(top_projects)            
 
             #Step 2: Find the list of voters, excluding the user, who also support these projects
             other_voters = gs_donations_df[gs_donations_df['PayoutAddress'].isin(top_addresses['PayoutAddress']) & (gs_donations_df['Voter'] != address)]
@@ -55,8 +56,10 @@ if address and address != 'None':
             # Filter by those participating in CR3
             filtered_top_supports = top_supports_by_other_voters[top_supports_by_other_voters['PayoutAddress'].isin(cr3_df['PayoutAddress'])]
             # Debugging
+
+            filtered_top_supports_names = filtered_top_supports.merge(cr3_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
             st.markdown("Top CR3 projects supported by other voters")
-            st.dataframe(filtered_top_supports)            
+            st.dataframe(filtered_top_supports_names)            
 
 
             #Step 4: Exclude projects voted by the user
@@ -69,8 +72,9 @@ if address and address != 'None':
             #filtered_supported_by_user = supported_by_user[supported_by_user['PayoutAddress'].isin(cr3_df['PayoutAddress'])]
 
             # Debugging
-            st.markdown("CR3 projects you have supported:")
-            st.dataframe(filtered_supported_by_user)            
+            matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'ProjectName']], on='PayoutAddress', how='inner')
+            st.markdown("You have previously donated to the payout address used by these projects:")
+            st.dataframe(matched_projects[Project Name])            
 
             recommended_addresses = filtered_top_supports[~filtered_top_supports['PayoutAddress'].isin(filtered_supported_by_user)].head(10)
 
