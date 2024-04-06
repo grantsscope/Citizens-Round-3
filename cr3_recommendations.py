@@ -44,7 +44,7 @@ filtered_top_supports = top_supports_by_other_voters[top_supports_by_other_voter
 #Step 4: Exclude projects voted by the user
 
 # Find projects supported by user
-supported_by_user = gs_donations_df[gs_donations_df['Voter'] == address]['PayoutAddress'].unique()
+supported_by_user = gs_donations_df[gs_donations_df['Voter'] == address].drop_duplicates(subset=['PayoutAddress'])
 # Filter by those participating in CR3
 
 filtered_supported_by_user = supported_by_user.merge(cr3_df['PayoutAddress'].drop_duplicates(), on='PayoutAddress', how='inner')
