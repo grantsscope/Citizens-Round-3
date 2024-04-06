@@ -55,4 +55,4 @@ recommended_addresses = filtered_top_supports[~filtered_top_supports['PayoutAddr
 
 recommended_projects = recommended_addresses.merge(cr3_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
 
-st.DataFrame(recommended_projects[['Project Name']])
+st.dataframe(recommended_projects[['Project Name']])
