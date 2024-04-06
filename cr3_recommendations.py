@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import streamlit.components.v1 as components
+import re
 
 # Get address
 address = st.text_input('Enter your Ethereum address below to uncover your unique impact story (starting "0x"):', 
