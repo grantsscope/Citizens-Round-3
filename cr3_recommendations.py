@@ -21,6 +21,7 @@ if address and address != 'None':
             gs_donations_df = pd.read_csv('gs donations.csv')
             # Convert voter to lower case for ease of comparison
             gs_donations_df['Voter'] = gs_donations_df['Voter'].str.lower()
+            gs_donations_df['PayoutAddress'] = gs_donations_df['PayoutAddress'].str.lower()
 
             #load the citizens round 3 projects
             cr3_df = pd.read_csv('summarized_cr3_projects.csv')
