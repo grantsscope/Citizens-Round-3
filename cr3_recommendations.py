@@ -30,7 +30,7 @@ if address and address != 'None':
 
             #Step 1: Find top 5 grantees donated to by the user
             top_addresses = gs_donations_df[gs_donations_df['Voter'] == address].groupby('PayoutAddress').agg({'AmountUSD': 'sum'}).reset_index().sort_values('AmountUSD', ascending=False).head(5)
-            top_projects = pd.merge(top_addresses, gs_donations_df[['PayoutAddress', 'ProjectName']].drop_duplicates(), on='PayoutAddress', how='left')
+            top_projects = pd.merge(top_addresses, gs_donations_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
 
             # Debugging
             st.markdown("Your top supported projects:")
