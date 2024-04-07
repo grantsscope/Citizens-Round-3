@@ -18,7 +18,7 @@ if address and address != 'None':
         else:
 
             # Load all donations data on Grants Stack
-            gs_donations_df = pd.read_csv('gs donations.csv')
+            gs_donations_df = pd.read_csv('gs_donations.csv')
             # Convert voter to lower case for ease of comparison
             gs_donations_df['Voter'] = gs_donations_df['Voter'].str.lower()
             gs_donations_df['PayoutAddress'] = gs_donations_df['PayoutAddress'].str.lower()
