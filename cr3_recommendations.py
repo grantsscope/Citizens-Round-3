@@ -29,8 +29,17 @@ if address and address != 'None':
             cr3_df['PayoutAddress'] = cr3_df['PayoutAddress'].str.lower()
 
             #Step 1: Find top 5 grantees donated to by the user
-            top_addresses = gs_donations_df[gs_donations_df['Voter'] == address].groupby('PayoutAddress').agg({'AmountUSD': 'sum'}).reset_index().sort_values('AmountUSD', ascending=False).head(5)
-            top_projects = pd.merge(top_addresses, gs_donations_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
+            #top_addresses = gs_donations_df[gs_donations_df['Voter'] == address].groupby('PayoutAddress').agg({'AmountUSD': 'sum'}).reset_index().sort_values('AmountUSD', ascending=False).head(5)
+            #top_projects = pd.merge(top_addresses, gs_donations_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
+
+            # Aggregate donations by PayoutAddress, Voter, and Round Name including the Project Name
+            top_addresses_by_round = gs_donations_df[gs_donations_df['Voter'] == address].groupby(['PayoutAddress', 'Round Name']).agg({'AmountUSD': 'sum', 'Project Name': 'first'}).reset_index().sort_values('AmountUSD', ascending=False)
+
+            # Now, get the top 5 addresses based on the summed AmountUSD
+            top_addresses = top_addresses_by_round.groupby('PayoutAddress').agg(TotalAmountUSD=('AmountUSD', 'sum')).reset_index().sort_values('TotalAmountUSD', ascending=False).head(5)
+
+            # Merge back with top_addresses_by_round to get associated Round Names and Project Names for the top addresses
+            top_projects = top_addresses.merge(top_addresses_by_round[['PayoutAddress', 'Round Name', 'Project Name', 'AmountUSD']], on='PayoutAddress', how='left')
 
             # Debugging
             st.markdown("Your top supported projects:")
