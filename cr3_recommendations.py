@@ -60,7 +60,8 @@ if address and address != 'None':
             st.dataframe(top_projects_grouped_df, column_config = {
                 "ProjectRound": "Project (Round) Donated to",
                 "AmountUSD": st.column_config.NumberColumn("Total Donations (oin USD)", step = 1, format = "$%d")
-                })            
+                },
+                column_order=("ProjectRound", "AmountUSD"))            
             # End of debudding and display code
 
             #Step 2: Find the list of voters, excluding the user, who also support these projects
