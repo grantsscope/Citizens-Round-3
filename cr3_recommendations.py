@@ -66,7 +66,7 @@ if address and address != 'None':
             top_supports_by_other_voters.columns = ['PayoutAddress', 'TotalAmountUSD', 'DonationCount']
 
             # Sort by donation count first, then by total amount in descending order
-            top_supports_by_other_voters = top_supports_by_other_voters.sort_values(by=['DonationCount', 'TotalAmountUSD'], ascending=[False, False]
+            top_supports_by_other_voters = top_supports_by_other_voters.sort_values(by=['DonationCount', 'TotalAmountUSD'], ascending=[False, False])
                                                  
 
             # Filter by those participating in CR3
