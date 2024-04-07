@@ -63,7 +63,8 @@ if address and address != 'None':
                 "ProjectRound": "Project (Round) Donated to",
                 "AmountUSD": st.column_config.NumberColumn("Total Donations (oin USD)", step = 1, format = "$%d")
                 },
-                column_order=("ProjectRound", "AmountUSD"))            
+                column_order=("ProjectRound", "AmountUSD"),
+                hide_index=True, use_container_width=True)            
             # End of debudding and display code
 
             #Step 2: Find the list of voters, excluding the user, who also support these projects
@@ -96,7 +97,7 @@ if address and address != 'None':
 
             filtered_top_supports_names = filtered_top_supports.merge(cr3_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
             tcol2.markdown("Top CR3 projects supported by other voters")
-            tcol2.dataframe(filtered_top_supports_names)            
+            tcol2.dataframe(filtered_top_supports_names, hide_index=True, use_container_width=True)            
 
 
             #Step 4: Exclude projects voted by the user
@@ -111,11 +112,11 @@ if address and address != 'None':
             # Debugging
             matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name']], on='PayoutAddress', how='inner')
             tcol2.markdown("You have previously donated to the payout address used by these projects:")
-            tcol2.dataframe(matched_projects)            
+            tcol2.dataframe(matched_projects, hide_index=True, use_container_width=True)            
 
             recommended_addresses = filtered_top_supports[~filtered_top_supports['PayoutAddress'].isin(filtered_supported_by_user['PayoutAddress'])].head(10)
 
             recommended_projects = recommended_addresses.merge(cr3_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
 
-            tcol2.dataframe(recommended_addresses)
+            tcol2.dataframe(recommended_addresses, hide_index=True, use_container_width=True)
             tcol2.dataframe(recommended_projects[['Project Name']])
