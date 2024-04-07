@@ -35,6 +35,31 @@ if address and address != 'None':
             # Convert Payout Address to lower case for ease of comparison
             cr3_df['PayoutAddress'] = cr3_df['PayoutAddress'].str.lower()
 
+            #Step 0: Find CR3 projects previously supported by user
+            supported_by_user = gs_donations_df[gs_donations_df['Voter'] == address].drop_duplicates(subset=['PayoutAddress'])
+
+            # Filter by those participating in CR3
+            filtered_supported_by_user = supported_by_user.merge(cr3_df['PayoutAddress'].drop_duplicates(), on='PayoutAddress', how='inner')
+            #filtered_supported_by_user = supported_by_user[supported_by_user['PayoutAddress'].isin(cr3_df['PayoutAddress'])]
+
+            # Debugging
+            matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name']], on='PayoutAddress', how='inner')
+            matched_projects_df = matched_projects.groupby('PayoutAddress').agg({
+                'AmountUSD': 'sum',  # Sum the amounts
+                'Round Name': ', '.join  # Join the combined project-round strings
+            }).reset_index()
+
+            tcol2.markdown("#### Who from the Retro Round you have contributed to before?")
+            tcol2.markdown("Here are the projects whose payout address you have previously donated to. Show them some love again in this round!")
+            tcol2.dataframe(matched_projects_df, hide_index=True, use_container_width=True,
+                column_order=("Project Name_y", "Round Name", "AmountUSD"),   
+                column_config = {
+                    "Project Name_y": "Project Name",
+                    "AmountUSD": st.column_config.NumberColumn("Total Donations (oin USD)", step = 1, format = "$%d")
+                    } 
+                )            
+
+
             #Step 1: Find top 5 grantees donated to by the user
             #top_addresses = gs_donations_df[gs_donations_df['Voter'] == address].groupby('PayoutAddress').agg({'AmountUSD': 'sum'}).reset_index().sort_values('AmountUSD', ascending=False).head(5)
             #top_projects = pd.merge(top_addresses, gs_donations_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
@@ -57,8 +82,8 @@ if address and address != 'None':
                 'ProjectRound': ', '.join  # Join the combined project-round strings
             }).reset_index()
 
-            tcol2.markdown("#### Your top supported projects:")
-            tcol2.caption("We scanned your entire donation history on Grants Stack through March 31st 2024. Here are your top 5 contributions based on the Payout Address you have contributed to:")
+            tcol2.markdown("#### Projects you have supported the most")
+            tcol2.caption("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
             tcol2.dataframe(top_projects_grouped_df, column_config = {
                 "ProjectRound": "Project (Round) Donated to",
                 "AmountUSD": st.column_config.NumberColumn("Total Donations (oin USD)", step = 1, format = "$%d")
@@ -72,7 +97,8 @@ if address and address != 'None':
             unique_other_voters = other_voters['Voter'].drop_duplicates()
 
             # Debugging
-            tcol2.markdown("A total of " + str(len(unique_other_voters)) + " voters also support your top 5 projects")
+            tcol2.markdown("#### How do we use this information?")
+            tcol2.markdown("A total of " + str(len(unique_other_voters)) + " voters also support the projects you support the most.")
 
             #Step 3: Find top citizen round 3 projects supported by other voters
             # Find projects supported by other voters
@@ -101,18 +127,6 @@ if address and address != 'None':
 
 
             #Step 4: Exclude projects voted by the user
-
-            # Find projects supported by user
-            supported_by_user = gs_donations_df[gs_donations_df['Voter'] == address].drop_duplicates(subset=['PayoutAddress'])
-
-            # Filter by those participating in CR3
-            filtered_supported_by_user = supported_by_user.merge(cr3_df['PayoutAddress'].drop_duplicates(), on='PayoutAddress', how='inner')
-            #filtered_supported_by_user = supported_by_user[supported_by_user['PayoutAddress'].isin(cr3_df['PayoutAddress'])]
-
-            # Debugging
-            matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name']], on='PayoutAddress', how='inner')
-            tcol2.markdown("You have previously donated to the payout address used by these projects:")
-            tcol2.dataframe(matched_projects, hide_index=True, use_container_width=True)            
 
             recommended_addresses = filtered_top_supports[~filtered_top_supports['PayoutAddress'].isin(filtered_supported_by_user['PayoutAddress'])].head(10)
 
