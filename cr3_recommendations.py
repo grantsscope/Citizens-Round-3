@@ -4,13 +4,14 @@ import streamlit.components.v1 as components
 import re
 
 st.set_page_config(layout='wide')
+tcol1,tcol2,tcol3 = st.columns([1,4,1])
 
-st.image("https://grantsscope.xyz/wp-content/uploads/2024/04/bafybeibrcljtp3nqiowx7qng7fh2xkj23rnm6fbidqosdu5qxrtcudkkue-3.jpeg")
-st.title('Gitcoin Citizens Retro - Round 3')
-st.markdown('### Get one-click personalized grantee recommendations')
+tcol2.image("https://grantsscope.xyz/wp-content/uploads/2024/04/bafybeibrcljtp3nqiowx7qng7fh2xkj23rnm6fbidqosdu5qxrtcudkkue-3.jpeg")
+tcol2.title('Gitcoin Citizens Retro - Round 3')
+tcol2.markdown('### Get one-click personalized grantee recommendations')
 
 # Get address
-address = st.text_input('Enter your Ethereum address below (starting "0x"):', 
+address = tcol2.text_input('Enter your Ethereum address below (starting "0x"):', 
 							help='ENS not supported, please enter 42-character hexadecimal address starting with "0x"')
 
 # Convert to lower case for ease of comparison
@@ -19,7 +20,7 @@ address = address.lower()
 if address and address != 'None':
         
         if not re.match(r'^(0x)?[0-9a-f]{40}$', address, flags=re.IGNORECASE):
-            st.error('Not a valid address. Please enter a valid 42-character hexadecimal Ethereum address starting with "0x"')
+            tcol2.error('Not a valid address. Please enter a valid 42-character hexadecimal Ethereum address starting with "0x"')
             my_bar.empty()
         else:
 
@@ -56,8 +57,9 @@ if address and address != 'None':
                 'ProjectRound': ', '.join  # Join the combined project-round strings
             }).reset_index()
 
-            st.markdown("Your top supported projects:")
-            st.dataframe(top_projects_grouped_df, column_config = {
+            tcol2.markdown("#### Your top supported projects:")
+            tcol2.caption("We scanned your entire donation history on Grants Stack through March 31st 2024. Here are your top 5 contributions based on the Payout Address you have contributed to:")
+            tcol2.dataframe(top_projects_grouped_df, column_config = {
                 "ProjectRound": "Project (Round) Donated to",
                 "AmountUSD": st.column_config.NumberColumn("Total Donations (oin USD)", step = 1, format = "$%d")
                 },
@@ -69,7 +71,7 @@ if address and address != 'None':
             unique_other_voters = other_voters['Voter'].drop_duplicates()
 
             # Debugging
-            st.markdown("A total of " + str(len(unique_other_voters)) + " voters also support your top 5 projects")
+            tcol2.markdown("A total of " + str(len(unique_other_voters)) + " voters also support your top 5 projects")
 
             #Step 3: Find top citizen round 3 projects supported by other voters
             # Find projects supported by other voters
@@ -93,8 +95,8 @@ if address and address != 'None':
             # Debugging
 
             filtered_top_supports_names = filtered_top_supports.merge(cr3_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
-            st.markdown("Top CR3 projects supported by other voters")
-            st.dataframe(filtered_top_supports_names)            
+            tcol2.markdown("Top CR3 projects supported by other voters")
+            tcol2.dataframe(filtered_top_supports_names)            
 
 
             #Step 4: Exclude projects voted by the user
@@ -108,12 +110,12 @@ if address and address != 'None':
 
             # Debugging
             matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name']], on='PayoutAddress', how='inner')
-            st.markdown("You have previously donated to the payout address used by these projects:")
-            st.dataframe(matched_projects)            
+            tcol2.markdown("You have previously donated to the payout address used by these projects:")
+            tcol2.dataframe(matched_projects)            
 
             recommended_addresses = filtered_top_supports[~filtered_top_supports['PayoutAddress'].isin(filtered_supported_by_user['PayoutAddress'])].head(10)
 
             recommended_projects = recommended_addresses.merge(cr3_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
 
-            st.dataframe(recommended_addresses)
-            st.dataframe(recommended_projects[['Project Name']])
+            tcol2.dataframe(recommended_addresses)
+            tcol2.dataframe(recommended_projects[['Project Name']])
