@@ -38,12 +38,21 @@ if address and address != 'None':
             # Now, get the top 5 addresses based on the summed AmountUSD
             top_addresses = top_addresses_by_round.groupby('PayoutAddress').agg(TotalAmountUSD=('AmountUSD', 'sum')).reset_index().sort_values('TotalAmountUSD', ascending=False).head(5)
 
+            # Following section is for debugging and display
             # Merge back with top_addresses_by_round to get associated Round Names and Project Names for the top addresses
             top_projects = top_addresses.merge(top_addresses_by_round[['PayoutAddress', 'Round Name', 'Project Name', 'AmountUSD']], on='PayoutAddress', how='left')
 
-            # Debugging
+            top_projects['ProjectRound'] = df.apply(lambda x: f"{x['Project Name']} [{x['Round Name']}]", axis=1)
+
+            # Grouping by 'PayoutAddress', summing 'AmountUSD', and joining the concatenated 'ProjectRound'
+            top_projects_grouped_df = df.groupby('PayoutAddress').agg({
+                'AmountUSD': 'sum',  # Sum the amounts
+                'ProjectRound': ', '.join  # Join the combined project-round strings
+            }).reset_index()
+
             st.markdown("Your top supported projects:")
-            st.dataframe(top_projects)            
+            st.dataframe(top_projects_grouped_df)            
+            # End of debudding and display code
 
             #Step 2: Find the list of voters, excluding the user, who also support these projects
             other_voters = gs_donations_df[gs_donations_df['PayoutAddress'].isin(top_addresses['PayoutAddress']) & (gs_donations_df['Voter'] != address)]
