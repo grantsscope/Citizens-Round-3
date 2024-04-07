@@ -42,10 +42,10 @@ if address and address != 'None':
             # Merge back with top_addresses_by_round to get associated Round Names and Project Names for the top addresses
             top_projects = top_addresses.merge(top_addresses_by_round[['PayoutAddress', 'Round Name', 'Project Name', 'AmountUSD']], on='PayoutAddress', how='left')
 
-            top_projects['ProjectRound'] = df.apply(lambda x: f"{x['Project Name']} [{x['Round Name']}]", axis=1)
+            top_projects['ProjectRound'] = top_projects.apply(lambda x: f"{x['Project Name']} [{x['Round Name']}]", axis=1)
 
             # Grouping by 'PayoutAddress', summing 'AmountUSD', and joining the concatenated 'ProjectRound'
-            top_projects_grouped_df = df.groupby('PayoutAddress').agg({
+            top_projects_grouped_df = top_projects.groupby('PayoutAddress').agg({
                 'AmountUSD': 'sum',  # Sum the amounts
                 'ProjectRound': ', '.join  # Join the combined project-round strings
             }).reset_index()
