@@ -3,8 +3,14 @@ import pandas as pd
 import streamlit.components.v1 as components
 import re
 
+st.set_page_config(layout='wide')
+
+st.image("https://grantsscope.xyz/wp-content/uploads/2024/04/bafybeibrcljtp3nqiowx7qng7fh2xkj23rnm6fbidqosdu5qxrtcudkkue-3.jpeg")
+st.title('Gitcoin Citizens Retro - Round 3')
+st.markdown('### Get one-click personalized grantee recommendations')
+
 # Get address
-address = st.text_input('Enter your Ethereum address below to uncover your unique impact story (starting "0x"):', 
+address = st.text_input('Enter your Ethereum address below (starting "0x"):', 
 							help='ENS not supported, please enter 42-character hexadecimal address starting with "0x"')
 
 # Convert to lower case for ease of comparison
@@ -51,7 +57,10 @@ if address and address != 'None':
             }).reset_index()
 
             st.markdown("Your top supported projects:")
-            st.dataframe(top_projects_grouped_df)            
+            st.dataframe(top_projects_grouped_df, column_config = {
+                "ProjectRound": "Project (Round) Donated to",
+                "AmountUSD": st.column_config.NumberColumn("Total Donations (oin USD)", step = 1, format = "$%d")
+                })            
             # End of debudding and display code
 
             #Step 2: Find the list of voters, excluding the user, who also support these projects
