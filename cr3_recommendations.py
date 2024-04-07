@@ -13,7 +13,7 @@ address = address.lower()
 if address and address != 'None':
         
         if not re.match(r'^(0x)?[0-9a-f]{40}$', address, flags=re.IGNORECASE):
-            tcol2.error('Not a valid address. Please enter a valid 42-character hexadecimal Ethereum address starting with "0x"')
+            st.error('Not a valid address. Please enter a valid 42-character hexadecimal Ethereum address starting with "0x"')
             my_bar.empty()
         else:
 
@@ -47,11 +47,18 @@ if address and address != 'None':
             # Find projects supported by other voters
             filtered_by_voters = gs_donations_df[gs_donations_df['Voter'].isin(unique_other_voters)]
 
-            # Sort by amount donated
+        
+            # Aggregate by donation amount and frequency of contribution
             top_supports_by_other_voters = filtered_by_voters.groupby('PayoutAddress') \
-                                                                 .agg({'AmountUSD': 'sum'}) \
-                                                                 .reset_index() \
-                                                                 .sort_values('AmountUSD', ascending=False)
+                                                             .agg({'AmountUSD': ['sum', 'count']}) \
+                                                             .reset_index()
+
+            # Rename columns for clarity
+            top_supports_by_other_voters.columns = ['PayoutAddress', 'TotalAmountUSD', 'DonationCount']
+
+            # Sort by donation count first, then by total amount in descending order
+            top_supports_by_other_voters = top_supports_by_other_voters.sort_values(by=['DonationCount', 'TotalAmountUSD'], ascending=[False, False]
+                                                 
 
             # Filter by those participating in CR3
             filtered_top_supports = top_supports_by_other_voters[top_supports_by_other_voters['PayoutAddress'].isin(cr3_df['PayoutAddress'])]
