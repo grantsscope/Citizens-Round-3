@@ -22,7 +22,6 @@ if address and address != 'None':
         
         if not re.match(r'^(0x)?[0-9a-f]{40}$', address, flags=re.IGNORECASE):
             tcol2.error('Not a valid address. Please enter a valid 42-character hexadecimal Ethereum address starting with "0x"')
-            my_bar.empty()
         else:
 
             # Load all donations data on Grants Stack
@@ -159,6 +158,8 @@ if address and address != 'None':
 
             # Show cluster of projects distringuished by those already contributed before CR3, those recommended and others
             cluster_df = pd.read_csv('cluster_cr3_projects.csv')
+            cluster_df['PayoutAddress'] = cluster_df['PayoutAddress'].str.lower()
+
 
             # Assuming 'PayoutAddress' is the column of interest in all DataFrames
             # Create conditions
@@ -168,8 +169,7 @@ if address and address != 'None':
             # Define choices based on conditions
             choices = [
                 '1',  # If PayoutAddress is in matched_projects_df
-                '2',  # If PayoutAddress is in top 5 of recommended_projects
-                '3'   # If PayoutAddress is in neither
+                '2'  # If PayoutAddress is in top 5 of recommended_projects
             ]
 
             # Use numpy.select to assign values to the 'flag' column based on conditions
