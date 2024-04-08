@@ -4,7 +4,7 @@ import streamlit.components.v1 as components
 import re
 
 st.set_page_config(layout='wide')
-tcol1,tcol2,tcol3 = st.columns([1,4,1])
+tcol1,tcol2,tcol3 = st.columns([1,3,1])
 
 tcol2.image("https://grantsscope.xyz/wp-content/uploads/2024/04/bafybeibrcljtp3nqiowx7qng7fh2xkj23rnm6fbidqosdu5qxrtcudkkue-3.jpeg")
 tcol2.title('Gitcoin Citizens Retro - Round 3')
@@ -34,6 +34,7 @@ if address and address != 'None':
             cr3_df = pd.read_csv('summarized_cr3_projects.csv')
             # Convert Payout Address to lower case for ease of comparison
             cr3_df['PayoutAddress'] = cr3_df['PayoutAddress'].str.lower()
+            cr3_df['Application Link'] = 'https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731/' + cr3_df['ApplicationId']
 
             #Step 0: Find CR3 projects previously supported by user
             supported_by_user = gs_donations_df[gs_donations_df['Voter'] == address].drop_duplicates(subset=['PayoutAddress'])
@@ -43,7 +44,7 @@ if address and address != 'None':
             #filtered_supported_by_user = supported_by_user[supported_by_user['PayoutAddress'].isin(cr3_df['PayoutAddress'])]
 
             # Debugging
-            matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name']], on='PayoutAddress', how='inner')
+            matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']], on='PayoutAddress', how='inner')
             matched_projects_df = matched_projects.groupby('PayoutAddress').agg({
                 'AmountUSD': 'sum',  # Sum the amounts
                 'Round Name': ', '.join  # Join the combined project-round strings
@@ -52,10 +53,11 @@ if address and address != 'None':
             tcol2.markdown("#### Who from the Retro Round you have contributed to before?")
             tcol2.markdown("Here are the projects whose payout address you have previously donated to. Show them some love again in this round!")
             tcol2.dataframe(matched_projects_df, hide_index=True, use_container_width=True,
-                column_order=("Project Name", "Round Name", "AmountUSD"),   
+                column_order=("Project Name_y", "Round Name", "Application Link"),   
                 column_config = {
                     "Project Name_y": "Project Name",
-                    "AmountUSD": st.column_config.NumberColumn("Total Donations (oin USD)", step = 1, format = "$%d")
+                    "Application Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
+                    #"AmountUSD": st.column_config.NumberColumn("Total Donations (in USD)", step = 1, format = "$%d")
                     } 
                 )            
 
