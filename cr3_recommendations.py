@@ -6,7 +6,8 @@ import numpy as np
 import plotly.express as px
 
 st.set_page_config(layout='wide')
-tcol1,tcol2,tcol3 = st.columns([1,8,1])
+tcol2 = st.columns([1])
+#tcol1,tcol2,tcol3 = st.columns([1,8,1])
 
 tcol2.image("https://grantsscope.xyz/wp-content/uploads/2024/04/bafybeibrcljtp3nqiowx7qng7fh2xkj23rnm6fbidqosdu5qxrtcudkkue-3.jpeg")
 tcol2.title('Gitcoin Citizens Retro - Round 3')
