@@ -4,7 +4,7 @@ import streamlit.components.v1 as components
 import re
 
 st.set_page_config(layout='wide')
-tcol1,tcol2,tcol3 = st.columns([1,3,1])
+tcol1,tcol2,tcol3 = st.columns([1,8,1])
 
 tcol2.image("https://grantsscope.xyz/wp-content/uploads/2024/04/bafybeibrcljtp3nqiowx7qng7fh2xkj23rnm6fbidqosdu5qxrtcudkkue-3.jpeg")
 tcol2.title('Gitcoin Citizens Retro - Round 3')
@@ -62,8 +62,6 @@ if address and address != 'None':
             tcol2.markdown("#### Who from the Retro Round you have contributed to before?")
             tcol2.markdown("Here are the projects whose payout address you have previously donated to. Show them some love again in this round!")
             
-            tcol2.dataframe(matched_projects)
-            tcol2.dataframe(matched_projects_df)
 
             tcol2.dataframe(matched_projects_df, hide_index=True, use_container_width=True,
                 column_order=("Project Name", "Short Project Desc", "Round Name", "Application Link"),   
