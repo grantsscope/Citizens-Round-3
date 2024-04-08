@@ -34,7 +34,7 @@ if address and address != 'None':
             cr3_df = pd.read_csv('summarized_cr3_projects.csv')
             # Convert Payout Address to lower case for ease of comparison
             cr3_df['PayoutAddress'] = cr3_df['PayoutAddress'].str.lower()
-            cr3_df['Application Link'] = 'https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731/' + cr3_df['ApplicationId']
+            cr3_df['Application Link'] = 'https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731/' + cr3_df['ApplicationId'].astype(str)
 
             #Step 0: Find CR3 projects previously supported by user
             supported_by_user = gs_donations_df[gs_donations_df['Voter'] == address].drop_duplicates(subset=['PayoutAddress'])
