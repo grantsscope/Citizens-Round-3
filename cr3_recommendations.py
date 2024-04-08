@@ -146,12 +146,12 @@ if address and address != 'None':
             #tcol2.dataframe(recommended_addresses, hide_index=True, use_container_width=True)
             tcol2.markdown("This group of voters have previously supported a total of " + str(len(recommended_projects)) + " projects participating in Citizens Retro #3")
             tcol2.markdown("Here are the top 5 most frequently contributed projects by voters who support the projects you contribute to most:")
-            tcol2.dataframe(recommended_projects,
+            tcol2.dataframe(recommended_projects.head(5),
                 column_config = {
                 "Project Name": "Project Name",
                 "Application Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
                 },
                 column_order=("Project Name", "Application Link"),
-                hide_index=True, use_container_width=True, max_rows=10)
+                hide_index=True, use_container_width=True)
 
 
