@@ -3,6 +3,7 @@ import pandas as pd
 import streamlit.components.v1 as components
 import re
 import numpy as np
+import plotly.express as px
 
 st.set_page_config(layout='wide')
 tcol1,tcol2,tcol3 = st.columns([1,8,1])
