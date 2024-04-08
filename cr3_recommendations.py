@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import streamlit.components.v1 as components
 import re
-import numpy
+import numpy as np
 
 st.set_page_config(layout='wide')
 tcol1,tcol2,tcol3 = st.columns([1,8,1])
