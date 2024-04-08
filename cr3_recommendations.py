@@ -187,7 +187,7 @@ if address and address != 'None':
             for index, row in cluster_df[cluster_df['flag'] == '3'].iterrows():
                 for _, compare_row in cluster_df[cluster_df['flag'].isin(['1', '2'])].iterrows():
                     distance = np.sqrt((row['UMAP_1'] - compare_row['UMAP_1']) ** 2 + (row['UMAP_2'] - compare_row['UMAP_2']) ** 2)
-                    if distance <= 0.25:
+                    if distance <= 0.5:
                         close_projects.append((row['PayoutAddress'], compare_row['PayoutAddress'],distance))
 
             tcol2.dataframe(close_projects)
@@ -197,7 +197,7 @@ if address and address != 'None':
                 project_3 = cr3_df[cr3_df['PayoutAddress'].str.lower() == close_pair[0]].iloc[0]
                 project_12 = cr3_df[cr3_df['PayoutAddress'].str.lower() == close_pair[1]].iloc[0]
                 
-                tcol2.markdown(f"Project with Flag 3: {project_3['Project Name']} - {project_3['Application Link']} - {distance}")
+                tcol2.markdown(f"Project with Flag 3: {project_3['Project Name']} - {project_3['Application Link']}")
                 tcol2.markdown(f"Similar to: {project_12['Project Name']}")
             
 
