@@ -55,7 +55,7 @@ if address and address != 'None':
             tcol2.dataframe(matched_projects)    
 
 
-            matched_projects_df = matched_projects.groupby('PayoutAddress', 'Project Name', 'Application Link').agg({
+            matched_projects_df = matched_projects.groupby(['PayoutAddress', 'Project Name', 'Application Link']).agg({
                 'AmountUSD': 'sum',                
                 'Round Name': ', '.join  # Join the combined project-round strings
             }).reset_index()
