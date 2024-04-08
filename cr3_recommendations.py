@@ -195,9 +195,8 @@ if address and address != 'None':
                 project_3 = cr3_df[cr3_df['PayoutAddress'].str.lower() == close_pair[0]].iloc[0]
                 project_12 = cr3_df[cr3_df['PayoutAddress'].str.lower() == close_pair[1]].iloc[0]
                 
-                print(f"Project with Flag 3: {project_3['Project Name']} - {project_3['Application Link']}")
-                print(f"Similar to: {project_12['Project Name']}")
-                print("-----")
+                tcol2.markdown(f"Project with Flag 3: {project_3['Project Name']} - {project_3['Application Link']}")
+                tcol2.markdown(f"Similar to: {project_12['Project Name']}")
             
 
             fig = px.scatter(cluster_df, x='UMAP_1', y='UMAP_2', color='flag',
