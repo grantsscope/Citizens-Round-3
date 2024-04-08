@@ -42,10 +42,16 @@ if address and address != 'None':
             # Filter by those participating in CR3
             #filtered_supported_by_user = supported_by_user.merge(cr3_df['PayoutAddress'].drop_duplicates(), on='PayoutAddress', how='inner')
             
-            filtered_supported_by_user = supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']].drop_duplicates(), on='PayoutAddress', how='inner')
+            filtered_supported_by_user = supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']].drop_duplicates(), 
+                on='PayoutAddress', 
+                how='inner',
+                suffixes=('', '_cr3'))
 
             tcol2.markdown("filtered_supported_by_user")
             tcol2.dataframe(filtered_supported_by_user)
+
+            filtered_supported_by_user.drop('Project Name', axis=1, inplace=True)
+            filtered_supported_by_user.rename(columns={'Project Name_cr3': 'Project Name'}, inplace=True)
 
             # Results Display Code
             #matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']], 
