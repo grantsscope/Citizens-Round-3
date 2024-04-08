@@ -40,43 +40,24 @@ if address and address != 'None':
             supported_by_user = gs_donations_df[gs_donations_df['Voter'] == address].drop_duplicates(subset=['PayoutAddress'])
 
             # Filter by those participating in CR3
-            #filtered_supported_by_user = supported_by_user.merge(cr3_df['PayoutAddress'].drop_duplicates(), on='PayoutAddress', how='inner')
+            filtered_supported_by_user = supported_by_user.merge(cr3_df['PayoutAddress'].drop_duplicates(), on='PayoutAddress', how='inner')
             
-            filtered_supported_by_user = supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']].drop_duplicates(), 
-                on='PayoutAddress', 
-                how='inner',
-                suffixes=('', '_cr3'))
-
-            tcol2.markdown("filtered_supported_by_user")
-            tcol2.dataframe(filtered_supported_by_user)
-
-            filtered_supported_by_user.drop('Project Name', axis=1, inplace=True)
-            filtered_supported_by_user.rename(columns={'Project Name_cr3': 'Project Name'}, inplace=True)
-
+            
             # Results Display Code
-            #matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']], 
-            #                on='PayoutAddress', 
-            #                how='inner',
-            #                suffixes=('', '_cr3'))
+            matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']], 
+                            on='PayoutAddress', 
+                            how='inner',
+                            suffixes=('', '_cr3'))
 
-            #matched_projects.drop('Project Name', axis=1, inplace=True)
-            #matched_projects.rename(columns={'Project Name_cr3': 'Project Name'}, inplace=True)
+            matched_projects.drop('Project Name', axis=1, inplace=True)
+            matched_projects.rename(columns={'Project Name_cr3': 'Project Name'}, inplace=True)
 
             #tcol2.dataframe(matched_projects)    
 
-            #matched_projects_df = matched_projects.groupby(['PayoutAddress', 'Project Name', 'Application Link']).agg({
-            #    'AmountUSD': 'sum',                
-            #    'Round Name': ', '.join  # Join the combined project-round strings
-            #}).reset_index()
-
-            matched_projects_df = filtered_supported_by_user.groupby(['PayoutAddress', 'Project Name', 'Application Link']).agg(
-                {
-                'AmountUSD': 'sum',  
-                'Round Name': ', '.join  # Join the combined project-round strings              
-                })
-
-            tcol2.markdown("matched_projects_df")
-            tcol2.dataframe(matched_projects_df, hide_index=True, use_container_width=True)
+            matched_projects_df = matched_projects.groupby(['PayoutAddress', 'Project Name', 'Application Link']).agg({
+                'AmountUSD': 'sum',                
+                'Round Name': ', '.join  # Join the combined project-round strings
+            }).reset_index()
 
             tcol2.markdown("#### Who from the Retro Round you have contributed to before?")
             tcol2.markdown("Here are the projects whose payout address you have previously donated to. Show them some love again in this round!")
