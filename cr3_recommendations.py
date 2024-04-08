@@ -52,8 +52,7 @@ if address and address != 'None':
             matched_projects.drop('Project Name', axis=1, inplace=True)
             matched_projects.rename(columns={'Project Name_cr3': 'Project Name'}, inplace=True)
 
-            tcol2.dataframe(matched_projects)    
-
+            #tcol2.dataframe(matched_projects)    
 
             matched_projects_df = matched_projects.groupby(['PayoutAddress', 'Project Name', 'Application Link']).agg({
                 'AmountUSD': 'sum',                
@@ -64,9 +63,10 @@ if address and address != 'None':
             tcol2.markdown("Here are the projects whose payout address you have previously donated to. Show them some love again in this round!")
             
             tcol2.dataframe(matched_projects_df, hide_index=True, use_container_width=True,
-                column_order=("Project Name", "Prior Round You Contributed to", "Application Link"),   
+                column_order=("Project Name", "Round Name", "Application Link"),   
                 column_config = {
-                    "Project Name_y": "Project Name",
+                    "Project Name": "Project Name",
+                    "Round Name": "Previous Round(s) You Contributed to",
                     "Application Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
                     #"AmountUSD": st.column_config.NumberColumn("Total Donations (in USD)", step = 1, format = "$%d")
                     } 
