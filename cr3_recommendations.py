@@ -8,9 +8,15 @@ import plotly.express as px
 st.set_page_config(layout='wide')
 tcol1,tcol2,tcol3 = st.columns([1,16,1])
 
-tcol2.image("https://grantsscope.xyz/wp-content/uploads/2024/04/bafybeibrcljtp3nqiowx7qng7fh2xkj23rnm6fbidqosdu5qxrtcudkkue-3.jpeg")
+#tcol2.image("https://grantsscope.xyz/wp-content/uploads/2024/04/bafybeibrcljtp3nqiowx7qng7fh2xkj23rnm6fbidqosdu5qxrtcudkkue-3.jpeg")
 tcol2.title('Gitcoin Citizens Retro - Round 3')
-tcol2.markdown('### Get one-click personalized grantee recommendations')
+tcol2.markdown('### Get one-click personalized grantee recommendations - by GrantsScope')
+tcol2.markdown('[The Gitcoin Citizens Retro Round](https://gitcoin.notion.site/Citizens-Retro-704a64ca7a874a1d97d94d48a05bb81f) focuses on rewarding Citizens for their contributions to the Gitcoin ecosystem. Donations open until April 16th. [GrantsScope](https://grantsscope.xyz/) is also a grantee in this round seeking retroactive funding.')
+
+with tcol2:
+    st.link_button("Explore Projects", "https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731",type="primary")
+with tcol2:
+    st.link_button("Donate to GrantsScope", "https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731/57",type="secondary")
 
 # Get address
 address = tcol2.text_input('Enter your Ethereum address below (starting "0x"):', 
