@@ -16,6 +16,10 @@ tcol2.markdown('### Get one-click personalized grantee recommendations')
 address = tcol2.text_input('Enter your Ethereum address below (starting "0x"):', 
 							help='ENS not supported, please enter 42-character hexadecimal address starting with "0x"')
 
+tcol2.markdown('You will receive three types of recommendations for grantees participating in Gitcoin Citizens Retro #3:')
+tcol2.markdown('1. List of grantees who you have contributed in the past - show them your support again!')
+tcol2.markdown('2. List of grantees supported by the community who also support your most favorite projects - get to know who you are missing!')
+tcol2.markdown('3. Grantees, if any, who are most similar to the grantees in the above two lists - you might like what they are up to')
 # Convert to lower case for ease of comparison
 address = address.lower()
 
@@ -60,14 +64,14 @@ if address and address != 'None':
                 'Round Name': ', '.join  # Join the combined project-round strings
             }).reset_index()
 
-            tcol2.markdown("#### Who from the Retro Round you have contributed to before?")
-            tcol2.markdown("Here are the projects whose payout address you have previously donated to. Show them some love again in this round!")
+            tcol2.markdown("#### 1. List of grantees who you have contributed in the past")
+            tcol2.markdown("Here are the grantees whose payout address you have previously donated to. Show them some love again in this round!")
             
 
             tcol2.dataframe(matched_projects_df, hide_index=True, use_container_width=True,
                 column_order=("Project Name", "Short Project Desc", "Round Name", "Application Link"),   
                 column_config = {
-                    "Project Name": "Project Name",
+                    "Project Name": "Grantee Name",
                     "Short Project Desc": "Short Description",
                     "Round Name": "Previous Round(s) You Contributed to",
                     "Application Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
@@ -98,7 +102,7 @@ if address and address != 'None':
                 'ProjectRound': ', '.join  # Join the combined project-round strings
             }).reset_index()
 
-            tcol2.markdown("#### Recommendations Based on Your Donation History")
+            tcol2.markdown("#### 2. List of grantees based on your donation history")
             tcol2.caption("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
             tcol2.dataframe(top_projects_grouped_df, column_config = {
                 "ProjectRound": "Project (Round) Donated to",
@@ -147,8 +151,8 @@ if address and address != 'None':
             recommended_projects = recommended_addresses.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']].drop_duplicates(), on='PayoutAddress', how='left')
 
             #tcol2.dataframe(recommended_addresses, hide_index=True, use_container_width=True)
-            tcol2.markdown("This group of voters have previously supported a total of " + str(len(recommended_projects)) + " projects participating in Citizens Retro #3")
-            tcol2.markdown("Here are the top 5 most frequently contributed projects by voters who support the projects you contribute to most:")
+            tcol2.markdown("This group of voters have previously supported a total of " + str(len(recommended_projects)) + " grantees participating in Citizens Retro #3")
+            tcol2.markdown("Here are the top 5 most frequently contributed grantees by voters who support the projects you contribute to most:")
             tcol2.dataframe(recommended_projects.head(5),
                 column_config = {
                 "Project Name": "Project Name",
@@ -240,26 +244,31 @@ if address and address != 'None':
 
             close_projects_df['Close_Project_12_Names'] = close_projects_df['Close_Project_12_Addresses'].apply(get_project_names)
 
-            # Display the updated DataFrame
+            if len(close_projects_df) > 0:
 
-            tcol2.dataframe(close_projects_df,
-                            column_config = {
-                            "Project_3_Name": "Project Name",
-                            "Project_3_Short_Desc": "Short Description",
-                            "Close_Project_12_Names": "Similar to",
-                            "Project_3_App_Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
-                            },
-                            column_order=("Project_3_Name", "Project_3_Short_Desc","Close_Project_12_Names", "Project_3_App_Link"),
-                            hide_index=True, use_container_width=True)    
+                # Display the updated DataFrame
+                tcol2.markdown('#### 3. Grantees who are most similar to the grantees in the above two lists')
 
-            fig = px.scatter(cluster_df, x='UMAP_1', y='UMAP_2', color='flag',
-                 text='Project Name', 
-                 hover_data={'UMAP_1': False, 'UMAP_2': False, 'Project Name': False, 'Short Project Desc': True, 'Cluster': False},
-                 title='Visual Landscape of Gitcoin Citizens Retro #3 Projects',
-                 color_discrete_map=color_map)
+                tcol2.dataframe(close_projects_df,
+                                column_config = {
+                                "Project_3_Name": "Grantee Name",
+                                "Project_3_Short_Desc": "Short Description",
+                                "Close_Project_12_Names": "Similar to",
+                                "Project_3_App_Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
+                                },
+                                column_order=("Project_3_Name", "Project_3_Short_Desc","Close_Project_12_Names", "Project_3_App_Link"),
+                                hide_index=True, use_container_width=True)    
 
-            # Update layout to ensure text labels are displayed nicely
-            fig.update_traces(textposition='top center')
+                fig = px.scatter(cluster_df, x='UMAP_1', y='UMAP_2', color='flag',
+                     text='Project Name', 
+                     hover_data={'UMAP_1': False, 'UMAP_2': False, 'Project Name': False, 'Short Project Desc': True, 'Cluster': False},
+                     title='Visual Landscape of Gitcoin Citizens Retro #3 Projects',
+                     color_discrete_map=color_map,
+                     width=1200, 
+                     height=900)
 
-            st.plotly_chart(fig, use_container_width=True)
+                # Update layout to ensure text labels are displayed nicely
+                fig.update_traces(textposition='top center')
+
+                st.plotly_chart(fig, use_container_width=True)
 
