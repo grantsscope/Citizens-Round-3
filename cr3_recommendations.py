@@ -18,14 +18,15 @@ with tcol2:
 with tcol2:
     st.link_button("Donate to GrantsScope", "https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731/57",type="secondary")
 
+tcol2.markdown('You will receive three types of recommendations for grantees participating in Gitcoin Citizens Retro #3:')
+tcol2.markdown('1. List of grantees who you have contributed in the past - show them your support again!')
+tcol2.markdown('2. List of grantees supported by the community who also support your most favorite projects - get to know who you are missing!')
+tcol2.markdown('3. Grantees, if any, who are most similar to the grantees in the above two lists - you might like what they are up to!')
+
 # Get address
 address = tcol2.text_input('Enter your Ethereum address below (starting "0x"):', 
 							help='ENS not supported, please enter 42-character hexadecimal address starting with "0x"')
 
-tcol2.markdown('You will receive three types of recommendations for grantees participating in Gitcoin Citizens Retro #3:')
-tcol2.markdown('1. List of grantees who you have contributed in the past - show them your support again!')
-tcol2.markdown('2. List of grantees supported by the community who also support your most favorite projects - get to know who you are missing!')
-tcol2.markdown('3. Grantees, if any, who are most similar to the grantees in the above two lists - you might like what they are up to')
 # Convert to lower case for ease of comparison
 address = address.lower()
 
@@ -112,12 +113,17 @@ if address and address != 'None':
 
             tcol2.markdown("#### 2. List of grantees based on your donation history")
             tcol2.markdown("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
-            tcol2.dataframe(top_projects_grouped_df, column_config = {
-                "ProjectRound": "Project (Round) Donated to",
-                "AmountUSD": st.column_config.NumberColumn("Total Donations (in USD)", step = 1, format = "$%d")
-                },
-                column_order=("ProjectRound", "AmountUSD"),
-                hide_index=True, use_container_width=True)            
+            
+            project_rounds = top_projects_grouped_df['ProjectRound'].tolist()
+            markdown_list = "\n".join(f"- {item}" for item in project_rounds)
+            tcol2.markdown(markdown_list)
+
+            #tcol2.dataframe(top_projects_grouped_df, column_config = {
+            #    "ProjectRound": "Project (Round) Donated to",
+            #    "AmountUSD": st.column_config.NumberColumn("Total Donations (in USD)", step = 1, format = "$%d")
+            #    },
+            #    column_order=("ProjectRound"),
+            #    hide_index=True, use_container_width=True)            
             # End of debudding and display code
 
             #Step 2: Find the list of voters, excluding the user, who also support these projects
