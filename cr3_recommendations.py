@@ -182,25 +182,25 @@ if address and address != 'None':
                 '3': '#ff4500'     # Dark red or bright orange for maximum visibility
             }
 
-            close_projects = []
+            #close_projects = []
 
-            """
-            for index, row in cluster_df[cluster_df['flag'] == '3'].iterrows():
-                for _, compare_row in cluster_df[cluster_df['flag'].isin(['1', '2'])].iterrows():
-                    distance = np.sqrt((row['UMAP_1'] - compare_row['UMAP_1']) ** 2 + (row['UMAP_2'] - compare_row['UMAP_2']) ** 2)
-                    if distance <= 0.5:
-                        close_projects.append((row['PayoutAddress'], compare_row['PayoutAddress'],distance))
+            
+            #for index, row in cluster_df[cluster_df['flag'] == '3'].iterrows():
+            #    for _, compare_row in cluster_df[cluster_df['flag'].isin(['1', '2'])].iterrows():
+            #        distance = np.sqrt((row['UMAP_1'] - compare_row['UMAP_1']) ** 2 + (row['UMAP_2'] - compare_row['UMAP_2']) ** 2)
+            #        if distance <= 0.5:
+            #            close_projects.append((row['PayoutAddress'], compare_row['PayoutAddress'],distance))
 
-            tcol2.dataframe(close_projects)
+            #tcol2.dataframe(close_projects)
 
             # Now, extract and print the information from cr3_df for each close pair found
-            for close_pair in close_projects:
-                project_3 = cr3_df[cr3_df['PayoutAddress'].str.lower() == close_pair[0]].iloc[0]
-                project_12 = cr3_df[cr3_df['PayoutAddress'].str.lower() == close_pair[1]].iloc[0]
+            #for close_pair in close_projects:
+            #    project_3 = cr3_df[cr3_df['PayoutAddress'].str.lower() == close_pair[0]].iloc[0]
+            #    project_12 = cr3_df[cr3_df['PayoutAddress'].str.lower() == close_pair[1]].iloc[0]
                 
-                tcol2.markdown(f"Project with Flag 3: {project_3['Project Name']} - {project_3['Application Link']}")
-                tcol2.markdown(f"Similar to: {project_12['Project Name']}")
-            """
+            #    tcol2.markdown(f"Project with Flag 3: {project_3['Project Name']} - {project_3['Application Link']}")
+            #    tcol2.markdown(f"Similar to: {project_12['Project Name']}")
+            
             
             # Initialize a list to hold tuples of project_3 addresses and their close project_12 addresses
             close_projects_data = []
@@ -218,6 +218,30 @@ if address and address != 'None':
 
             # Create a DataFrame from the list of tuples
             close_projects_df = pd.DataFrame(close_projects_data, columns=['Project_3_Address', 'Close_Project_12_Addresses'])
+
+            close_projects_df['Project_3_Name'] = close_projects_df['Project_3_Address'].apply(
+                lambda x: cr3_df.loc[cr3_df['PayoutAddress'].str.lower() == x.lower(), 'Project Name'].iloc[0] if not cr3_df.loc[cr3_df['PayoutAddress'].str.lower() == x.lower()].empty else 'N/A'
+            )
+            
+            close_projects_df['Project_3_Short_Desc'] = close_projects_df['Project_3_Address'].apply(
+                lambda x: cr3_df.loc[cr3_df['PayoutAddress'].str.lower() == x.lower(), 'Short Project Desc'].iloc[0] if not cr3_df.loc[cr3_df['PayoutAddress'].str.lower() == x.lower()].empty else 'N/A'
+            )
+            
+            close_projects_df['Project_3_App_Link'] = close_projects_df['Project_3_Address'].apply(
+                lambda x: cr3_df.loc[cr3_df['PayoutAddress'].str.lower() == x.lower(), 'Application Link'].iloc[0] if not cr3_df.loc[cr3_df['PayoutAddress'].str.lower() == x.lower()].empty else 'N/A'
+            )
+
+            def get_project_names(addresses):
+                project_names = []
+                for address in addresses:
+                    project_name = cr3_df.loc[cr3_df['PayoutAddress'].str.lower() == address.lower(), 'Project Name'].iloc[0] if not cr3_df.loc[cr3_df['PayoutAddress'].str.lower() == address.lower()].empty else 'N/A'
+                    project_names.append(project_name)
+                return ', '.join(project_names)
+
+            close_projects_df['Close_Project_12_Names'] = close_projects_df['Close_Project_12_Addresses'].apply(get_project_names)
+
+            # Display the updated DataFrame
+            tcol2.dataframe(close_projects_df)
 
             tcol2.dataframe(close_projects_df)    
 
