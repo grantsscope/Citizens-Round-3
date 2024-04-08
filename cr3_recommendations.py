@@ -46,23 +46,22 @@ if address and address != 'None':
             # Debugging
             matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']], on='PayoutAddress', how='inner')
 
-            tcol2.dataframe(matched_projects)
 
-            #matched_projects_df = matched_projects.groupby('PayoutAddress', 'Project Name', 'Application Link').agg({
-            #    'AmountUSD': 'sum',                
-            #    'Round Name': ', '.join  # Join the combined project-round strings
-            #}).reset_index()
+            matched_projects_df = matched_projects.groupby('PayoutAddress', 'Project Name_y', 'Application Link').agg({
+                'AmountUSD': 'sum',                
+                'Round Name': ', '.join  # Join the combined project-round strings
+            }).reset_index()
 
             tcol2.markdown("#### Who from the Retro Round you have contributed to before?")
             tcol2.markdown("Here are the projects whose payout address you have previously donated to. Show them some love again in this round!")
-            tcol2.dataframe(matched_projects_df, hide_index=True, use_container_width=True)
-                #column_order=("Project Name_y", "Round Name", "Application Link"),   
-                #column_config = {
-                #    "Project Name_y": "Project Name",
-                #    "Application Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
+            tcol2.dataframe(matched_projects_df, hide_index=True, use_container_width=True,
+                column_order=("Project Name_y", "Round Name", "Application Link"),   
+                column_config = {
+                    "Project Name_y": "Project Name",
+                    "Application Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
                     #"AmountUSD": st.column_config.NumberColumn("Total Donations (in USD)", step = 1, format = "$%d")
-                #    } 
-                #)            
+                    } 
+                )            
 
 
             #Step 1: Find top 5 grantees donated to by the user
