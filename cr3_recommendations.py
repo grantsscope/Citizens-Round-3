@@ -63,7 +63,7 @@ if address and address != 'None':
             tcol2.markdown("Here are the projects whose payout address you have previously donated to. Show them some love again in this round!")
             
             tcol2.dataframe(matched_projects_df, hide_index=True, use_container_width=True,
-                column_order=("Project Name", "Round Name", "Application Link"),   
+                column_order=("Project Name", "Short Project Desc", "Round Name", "Application Link"),   
                 column_config = {
                     "Project Name": "Project Name",
                     "Short Project Desc": "Short Description",
