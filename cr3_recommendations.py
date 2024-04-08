@@ -44,10 +44,16 @@ if address and address != 'None':
             #filtered_supported_by_user = supported_by_user[supported_by_user['PayoutAddress'].isin(cr3_df['PayoutAddress'])]
 
             # Debugging
-            matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']], on='PayoutAddress', how='inner')
+            matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']], 
+                            on='PayoutAddress', 
+                            how='inner',
+                            suffixes=('', '_cr3'))
+
+            matched_projects.drop('Project Name', axis=1, inplace=True)
+            matched_projects.rename(columns={'Project Name_cr3': 'Project Name'}, inplace=True)
 
 
-            matched_projects_df = matched_projects.groupby('PayoutAddress', 'Project Name_cr3', 'Application Link').agg({
+            matched_projects_df = matched_projects.groupby('PayoutAddress', 'Project Name', 'Application Link').agg({
                 'AmountUSD': 'sum',                
                 'Round Name': ', '.join  # Join the combined project-round strings
             }).reset_index()
