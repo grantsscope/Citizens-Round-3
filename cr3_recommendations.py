@@ -152,6 +152,6 @@ if address and address != 'None':
                 "Application Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
                 },
                 column_order=("Project Name", "Application Link"),
-                hide_index=True, use_container_width=True).head(5)            
+                hide_index=True, use_container_width=True, max_rows=10)
 
 
