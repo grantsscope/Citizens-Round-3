@@ -47,7 +47,7 @@ if address and address != 'None':
             matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']], on='PayoutAddress', how='inner')
 
 
-            matched_projects_df = matched_projects.groupby('PayoutAddress', 'Project Name_y', 'Application Link').agg({
+            matched_projects_df = matched_projects.groupby('PayoutAddress', 'Project Name_cr3', 'Application Link').agg({
                 'AmountUSD': 'sum',                
                 'Round Name': ', '.join  # Join the combined project-round strings
             }).reset_index()
