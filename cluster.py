@@ -35,6 +35,7 @@ plot_df['Cluster'] = cluster.labels_
 plot_df['Project Name'] = df['Project Name']
 plot_df['Project Desc'] = df['Project Desc']
 plot_df['Short Project Desc'] = df['Short Project Desc']
+plot_df['PayoutAddress'] = df['PayoutAddress']
 
 plot_df.to_csv('cluster_cr3_projects.csv')
 
