@@ -52,6 +52,8 @@ if address and address != 'None':
             matched_projects.drop('Project Name', axis=1, inplace=True)
             matched_projects.rename(columns={'Project Name_cr3': 'Project Name'}, inplace=True)
 
+            tcol2.dataframe(matched_projects)    
+
 
             matched_projects_df = matched_projects.groupby('PayoutAddress', 'Project Name', 'Application Link').agg({
                 'AmountUSD': 'sum',                
