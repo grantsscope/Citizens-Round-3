@@ -76,7 +76,7 @@ if address and address != 'None':
                 })
 
             tcol2.markdown("matched_projects_df")
-            tcol2.dataframe(matched_projects_df)
+            tcol2.dataframe(matched_projects_df, hide_index=True, use_container_width=True)
 
             tcol2.markdown("#### Who from the Retro Round you have contributed to before?")
             tcol2.markdown("Here are the projects whose payout address you have previously donated to. Show them some love again in this round!")
