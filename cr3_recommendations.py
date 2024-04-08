@@ -45,10 +45,13 @@ if address and address != 'None':
 
             # Debugging
             matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']], on='PayoutAddress', how='inner')
-            matched_projects_df = matched_projects.groupby('PayoutAddress', 'Project Name', 'Application Link').agg({
-                'AmountUSD': 'sum',                
-                'Round Name': ', '.join  # Join the combined project-round strings
-            }).reset_index()
+
+            tcol2.dataframe(matched_projects)
+
+            #matched_projects_df = matched_projects.groupby('PayoutAddress', 'Project Name', 'Application Link').agg({
+            #    'AmountUSD': 'sum',                
+            #    'Round Name': ', '.join  # Join the combined project-round strings
+            #}).reset_index()
 
             tcol2.markdown("#### Who from the Retro Round you have contributed to before?")
             tcol2.markdown("Here are the projects whose payout address you have previously donated to. Show them some love again in this round!")
