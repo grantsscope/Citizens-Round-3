@@ -43,7 +43,7 @@ if address and address != 'None':
             filtered_supported_by_user = supported_by_user.merge(cr3_df['PayoutAddress'].drop_duplicates(), on='PayoutAddress', how='inner')
             #filtered_supported_by_user = supported_by_user[supported_by_user['PayoutAddress'].isin(cr3_df['PayoutAddress'])]
 
-            # Debugging
+            # Results Display Code
             matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']], 
                             on='PayoutAddress', 
                             how='inner',
@@ -95,7 +95,7 @@ if address and address != 'None':
                 'ProjectRound': ', '.join  # Join the combined project-round strings
             }).reset_index()
 
-            tcol2.markdown("#### Projects you have supported the most")
+            tcol2.markdown("#### Recommendations Based on Your Donation History")
             tcol2.caption("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
             tcol2.dataframe(top_projects_grouped_df, column_config = {
                 "ProjectRound": "Project (Round) Donated to",
@@ -110,7 +110,6 @@ if address and address != 'None':
             unique_other_voters = other_voters['Voter'].drop_duplicates()
 
             # Debugging
-            tcol2.markdown("#### How do we use this information?")
             tcol2.markdown("A total of " + str(len(unique_other_voters)) + " voters also support the projects you support the most.")
 
             #Step 3: Find top citizen round 3 projects supported by other voters
@@ -135,15 +134,24 @@ if address and address != 'None':
             # Debugging
 
             filtered_top_supports_names = filtered_top_supports.merge(cr3_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
-            tcol2.markdown("Top CR3 projects supported by other voters")
-            tcol2.dataframe(filtered_top_supports_names, hide_index=True, use_container_width=True)            
-
+            #tcol2.markdown("Top CR3 projects supported by other voters")
+            #tcol2.dataframe(filtered_top_supports_names, hide_index=True, use_container_width=True)            
 
             #Step 4: Exclude projects voted by the user
 
             recommended_addresses = filtered_top_supports[~filtered_top_supports['PayoutAddress'].isin(filtered_supported_by_user['PayoutAddress'])].head(10)
 
-            recommended_projects = recommended_addresses.merge(cr3_df[['PayoutAddress', 'Project Name']].drop_duplicates(), on='PayoutAddress', how='left')
+            recommended_projects = recommended_addresses.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']].drop_duplicates(), on='PayoutAddress', how='left')
 
-            tcol2.dataframe(recommended_addresses, hide_index=True, use_container_width=True)
-            tcol2.dataframe(recommended_projects[['Project Name']])
+            #tcol2.dataframe(recommended_addresses, hide_index=True, use_container_width=True)
+            tcol2.markdown("This group of voters have previously supported a total of " + str(len(recommended_projects)) + " projects participating in Citizens Retro #3")
+            tcol2.("Here are the top 5 most frequently contributed projects by voters who support the projects you contribute to most:")
+            tcol2.dataframe(recommended_projects,
+                column_config = {
+                "Project Name": "Project Name",
+                "Application Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
+                },
+                column_order=("Project Name", "Application Link"),
+                hide_index=True, use_container_width=True)            
+
+
