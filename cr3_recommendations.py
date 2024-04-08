@@ -182,6 +182,24 @@ if address and address != 'None':
                 '3': '#ff4500'     # Dark red or bright orange for maximum visibility
             }
 
+            close_projects = []
+
+            for index, row in cluster_df[cluster_df['flag'] == '3'].iterrows():
+                for _, compare_row in cluster_df[cluster_df['flag'].isin(['1', '2'])].iterrows():
+                    distance = np.sqrt((row['UMAP_1'] - compare_row['UMAP_1']) ** 2 + (row['UMAP_2'] - compare_row['UMAP_2']) ** 2)
+                    if distance <= 0.5:
+                        close_projects.append((row['PayoutAddress'], compare_row['PayoutAddress']))
+
+            # Now, extract and print the information from cr3_df for each close pair found
+            for close_pair in close_projects:
+                project_3 = cr3_df[cr3_df['PayoutAddress'].str.lower() == close_pair[0]].iloc[0]
+                project_12 = cr3_df[cr3_df['PayoutAddress'].str.lower() == close_pair[1]].iloc[0]
+                
+                print(f"Project with Flag 3: {project_3['Project Name']} - {project_3['Application Link']}")
+                print(f"Similar to: {project_12['Project Name']}")
+                print("-----")
+            
+
             fig = px.scatter(cluster_df, x='UMAP_1', y='UMAP_2', color='flag',
                  text='Project Name', 
                  hover_data={'UMAP_1': False, 'UMAP_2': False, 'Project Name': False, 'Short Project Desc': True, 'Cluster': False},
