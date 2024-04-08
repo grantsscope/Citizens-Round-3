@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import streamlit.components.v1 as components
 import re
+import numpy
 
 st.set_page_config(layout='wide')
 tcol1,tcol2,tcol3 = st.columns([1,8,1])
@@ -141,7 +142,7 @@ if address and address != 'None':
 
             #Step 4: Exclude projects voted by the user
 
-            recommended_addresses = filtered_top_supports[~filtered_top_supports['PayoutAddress'].isin(filtered_supported_by_user['PayoutAddress'])].head(10)
+            recommended_addresses = filtered_top_supports[~filtered_top_supports['PayoutAddress'].isin(filtered_supported_by_user['PayoutAddress'])]
 
             recommended_projects = recommended_addresses.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']].drop_duplicates(), on='PayoutAddress', how='left')
 
@@ -156,4 +157,38 @@ if address and address != 'None':
                 column_order=("Project Name", "Application Link"),
                 hide_index=True, use_container_width=True)
 
+            # Show cluster of projects distringuished by those already contributed before CR3, those recommended and others
+            cluster_df = pd.read_csv('cluster_cr3_projects.csv')
+
+            # Assuming 'PayoutAddress' is the column of interest in all DataFrames
+            # Create conditions
+            condition1 = cluster_df['PayoutAddress'].isin(matched_projects_df['PayoutAddress'])
+            condition2 = cluster_df['PayoutAddress'].isin(recommended_projects.head(5)['PayoutAddress'])
+
+            # Define choices based on conditions
+            choices = [
+                '1',  # If PayoutAddress is in matched_projects_df
+                '2',  # If PayoutAddress is in top 5 of recommended_projects
+                '3'   # If PayoutAddress is in neither
+            ]
+
+            # Use numpy.select to assign values to the 'flag' column based on conditions
+            cluster_df['flag'] = np.select([condition1, condition2], choices, default='3')
+
+            color_map = {
+                '1': '#cccccc',    # Light gray for the most subtle appearance
+                '2': '#0000ff',    # Solid blue for noticeable emphasis
+                '3': '#ff4500'     # Dark red or bright orange for maximum visibility
+            }
+
+            fig = px.scatter(cluster_df, x='UMAP_1', y='UMAP_2', color='flag',
+                 text='Project Name', 
+                 hover_data={'UMAP_1': False, 'UMAP_2': False, 'Project Name': False, 'Short Project Desc': True, 'Cluster': False},
+                 title='Visual Landscape of Gitcoin Citizens Retro #3 Projects',
+                 color_discrete_map=color_map)
+
+            # Update layout to ensure text labels are displayed nicely
+            fig.update_traces(textposition='top center')
+
+            st.plotly_chart(fig, use_container_width=True)
 
