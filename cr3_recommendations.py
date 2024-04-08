@@ -102,8 +102,10 @@ if address and address != 'None':
                 'ProjectRound': ', '.join  # Join the combined project-round strings
             }).reset_index()
 
+            top_projects_grouped_df.sort_values(by=['AmountUSD'])
+
             tcol2.markdown("#### 2. List of grantees based on your donation history")
-            tcol2.caption("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
+            tcol2.markdown("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
             tcol2.dataframe(top_projects_grouped_df, column_config = {
                 "ProjectRound": "Project (Round) Donated to",
                 "AmountUSD": st.column_config.NumberColumn("Total Donations (in USD)", step = 1, format = "$%d")
@@ -151,8 +153,9 @@ if address and address != 'None':
             recommended_projects = recommended_addresses.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']].drop_duplicates(), on='PayoutAddress', how='left')
 
             #tcol2.dataframe(recommended_addresses, hide_index=True, use_container_width=True)
-            tcol2.markdown("This group of voters have previously supported a total of " + str(len(recommended_projects)) + " grantees participating in Citizens Retro #3")
-            tcol2.markdown("Here are the top 5 most frequently contributed grantees by voters who support the projects you contribute to most:")
+            tcol2.markdown("This group of voters have previously supported a total of " + str(len(recommended_projects)) + " grantees participating in Citizens Retro #3 \
+                Here are the 5 most frequently contributed grantees by this group who you have never donated to.")
+            
             tcol2.dataframe(recommended_projects.head(5),
                 column_config = {
                 "Project Name": "Project Name",
@@ -248,6 +251,8 @@ if address and address != 'None':
 
                 # Display the updated DataFrame
                 tcol2.markdown('#### 3. Grantees who are most similar to the grantees in the above two lists')
+                tcol2.markdown("So that you don't miss out on learning about new grantees or grantees outside your contribution network, \
+                here's a stab at listing most similar grantees to some of our recommendations above - you might like what they are up to:")
 
                 tcol2.dataframe(close_projects_df,
                                 column_config = {
