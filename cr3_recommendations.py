@@ -201,29 +201,25 @@ if address and address != 'None':
                 tcol2.markdown(f"Project with Flag 3: {project_3['Project Name']} - {project_3['Application Link']}")
                 tcol2.markdown(f"Similar to: {project_12['Project Name']}")
             """
+            
+            # Initialize a list to hold tuples of project_3 addresses and their close project_12 addresses
+            close_projects_data = []
+
             for index, project_3 in cluster_df[cluster_df['flag'] == '3'].iterrows():
-                close_project_12s = []
+                close_project_12_addresses = []
                 for _, project_12 in cluster_df[cluster_df['flag'].isin(['1', '2'])].iterrows():
                     distance = np.sqrt((project_3['UMAP_1'] - project_12['UMAP_1']) ** 2 + (project_3['UMAP_2'] - project_12['UMAP_2']) ** 2)
                     if distance < 0.5:
-                        close_project_12s.append(project_12['PayoutAddress'])
+                        close_project_12_addresses.append(project_12['PayoutAddress'])
                 
-                if close_project_12s:  # If there are any close projects
-                    close_projects[project_3['PayoutAddress']] = close_project_12s
+                # Add the collected data for this project_3 as a single tuple
+                if close_project_12_addresses:
+                    close_projects_data.append((project_3['PayoutAddress'], close_project_12_addresses))
 
-            # Now, construct a DataFrame from close_projects
-            # Each row will represent a project_3 with a list of close project_12s
-            close_projects_df = pd.DataFrame([(k, v) for k, v in close_projects.items()], columns=['Project_3_Address', 'Close_Project_12_Addresses'])
+            # Create a DataFrame from the list of tuples
+            close_projects_df = pd.DataFrame(close_projects_data, columns=['Project_3_Address', 'Close_Project_12_Addresses'])
 
-            # To display detailed information, merge this information back with cr3_df
-            for index, row in close_projects_df.iterrows():
-                project_3_info = cr3_df[cr3_df['PayoutAddress'].str.lower() == row['Project_3_Address']].iloc[0]
-                project_12_info_list = [cr3_df[cr3_df['PayoutAddress'].str.lower() == addr].iloc[0] for addr in row['Close_Project_12_Addresses']]
-                
-                tcol2.markdown(f"Project 3: {project_3_info['Project Name']} - {project_3_info['Application Link']}")
-                for project_12_info in project_12_info_list:
-                    tcol2.markdown(f"{project_12_info['Project Name']}")
-                
+            tcol2.dataframe(close_projects_df)    
 
             fig = px.scatter(cluster_df, x='UMAP_1', y='UMAP_2', color='flag',
                  text='Project Name', 
