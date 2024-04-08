@@ -99,7 +99,7 @@ if address and address != 'None':
             tcol2.caption("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
             tcol2.dataframe(top_projects_grouped_df, column_config = {
                 "ProjectRound": "Project (Round) Donated to",
-                "AmountUSD": st.column_config.NumberColumn("Total Donations (oin USD)", step = 1, format = "$%d")
+                "AmountUSD": st.column_config.NumberColumn("Total Donations (in USD)", step = 1, format = "$%d")
                 },
                 column_order=("ProjectRound", "AmountUSD"),
                 hide_index=True, use_container_width=True)            
@@ -152,6 +152,6 @@ if address and address != 'None':
                 "Application Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
                 },
                 column_order=("Project Name", "Application Link"),
-                hide_index=True, use_container_width=True)            
+                hide_index=True, use_container_width=True).head(5)            
 
 
