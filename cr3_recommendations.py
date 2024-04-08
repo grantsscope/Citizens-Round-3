@@ -44,7 +44,7 @@ if address and address != 'None':
             
             
             # Results Display Code
-            matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']], 
+            matched_projects = filtered_supported_by_user.merge(cr3_df[['PayoutAddress', 'Project Name', 'Short Project Desc', 'Application Link']], 
                             on='PayoutAddress', 
                             how='inner',
                             suffixes=('', '_cr3'))
@@ -54,7 +54,7 @@ if address and address != 'None':
 
             #tcol2.dataframe(matched_projects)    
 
-            matched_projects_df = matched_projects.groupby(['PayoutAddress', 'Project Name', 'Application Link']).agg({
+            matched_projects_df = matched_projects.groupby(['PayoutAddress', 'Project Name', 'Short Project Desc', 'Application Link']).agg({
                 'AmountUSD': 'sum',                
                 'Round Name': ', '.join  # Join the combined project-round strings
             }).reset_index()
@@ -66,6 +66,7 @@ if address and address != 'None':
                 column_order=("Project Name", "Round Name", "Application Link"),   
                 column_config = {
                     "Project Name": "Project Name",
+                    "Short Project Desc": "Short Description",
                     "Round Name": "Previous Round(s) You Contributed to",
                     "Application Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
                     #"AmountUSD": st.column_config.NumberColumn("Total Donations (in USD)", step = 1, format = "$%d")
