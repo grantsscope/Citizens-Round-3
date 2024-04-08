@@ -241,9 +241,16 @@ if address and address != 'None':
             close_projects_df['Close_Project_12_Names'] = close_projects_df['Close_Project_12_Addresses'].apply(get_project_names)
 
             # Display the updated DataFrame
-            tcol2.dataframe(close_projects_df)
 
-            tcol2.dataframe(close_projects_df)    
+            tcol2.dataframe(close_projects_df,
+                            column_config = {
+                            "Project_3_Name": "Project Name",
+                            "Project_3_Short_Desc": "Short Description",
+                            "Close_Project_12_Names": "Similar to",
+                            "Project_3_App_Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
+                            },
+                            column_order=("Project_3_Name", "Project_3_Short_Desc","Close_Project_12_Names", "Project_3_App_Link"),
+                            hide_index=True, use_container_width=True)    
 
             fig = px.scatter(cluster_df, x='UMAP_1', y='UMAP_2', color='flag',
                  text='Project Name', 
