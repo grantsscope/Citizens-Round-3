@@ -190,6 +190,8 @@ if address and address != 'None':
                     if distance <= 0.25:
                         close_projects.append((row['PayoutAddress'], compare_row['PayoutAddress'],distance))
 
+            tcol2.dataframe(close_projects)
+
             # Now, extract and print the information from cr3_df for each close pair found
             for close_pair in close_projects:
                 project_3 = cr3_df[cr3_df['PayoutAddress'].str.lower() == close_pair[0]].iloc[0]
@@ -198,6 +200,7 @@ if address and address != 'None':
                 tcol2.markdown(f"Project with Flag 3: {project_3['Project Name']} - {project_3['Application Link']} - {distance}")
                 tcol2.markdown(f"Similar to: {project_12['Project Name']}")
             
+
 
             fig = px.scatter(cluster_df, x='UMAP_1', y='UMAP_2', color='flag',
                  text='Project Name', 
