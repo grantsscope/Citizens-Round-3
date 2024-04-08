@@ -188,7 +188,7 @@ if address and address != 'None':
                 for _, compare_row in cluster_df[cluster_df['flag'].isin(['1', '2'])].iterrows():
                     distance = np.sqrt((row['UMAP_1'] - compare_row['UMAP_1']) ** 2 + (row['UMAP_2'] - compare_row['UMAP_2']) ** 2)
                     if distance <= 0.25:
-                        close_projects.append((row['PayoutAddress'], compare_row['PayoutAddress']), distance)
+                        close_projects.append((row['PayoutAddress'], compare_row['PayoutAddress'],distance))
 
             # Now, extract and print the information from cr3_df for each close pair found
             for close_pair in close_projects:
