@@ -10,18 +10,16 @@ tcol1,tcol2,tcol3 = st.columns([1,16,1])
 
 #tcol2.image("https://grantsscope.xyz/wp-content/uploads/2024/04/bafybeibrcljtp3nqiowx7qng7fh2xkj23rnm6fbidqosdu5qxrtcudkkue-3.jpeg")
 tcol2.title('Gitcoin Citizens Retro - Round 3')
-tcol2.markdown('### Get one-click personalized grantee recommendations - by GrantsScope')
-tcol2.markdown('[The Gitcoin Citizens Retro Round](https://gitcoin.notion.site/Citizens-Retro-704a64ca7a874a1d97d94d48a05bb81f) focuses on rewarding Citizens for their contributions to the Gitcoin ecosystem. Donations open until April 16th. [GrantsScope](https://grantsscope.xyz/) is also a grantee in this round seeking retroactive funding.')
+tcol2.markdown('### Get one-click personalized grantee recommendations using GrantsScope')
+tcol2.markdown('Dive into the [Gitcoin Citizens Retro Round](https://gitcoin.notion.site/Citizens-Retro-704a64ca7a874a1d97d94d48a05bb81f), designed to honor and reward the invaluable contributions of our citizens to the Gitcoin ecosystem. \
+                Contributions are welcome until **April 16th**, and we\'re excited to share that GrantsScope is among the grantees seeking retroactive support in this round. ')
+tcol2.markdown('Want to explore more about the round? Click [here](https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731)  for a deep dive. \
+                If GrantsScope\'s mission resonates with you, consider showing your support in the Gitcoin Citizens Round by contributing [here](https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731/57).')
 
-with tcol2:
-    st.link_button("Explore Projects", "https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731",type="primary")
-with tcol2:
-    st.link_button("Donate to GrantsScope", "https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731/57",type="secondary")
-
-tcol2.markdown('You will receive three types of recommendations for grantees participating in Gitcoin Citizens Retro #3:')
-tcol2.markdown('1. List of grantees who you have contributed in the past - show them your support again!')
-tcol2.markdown('2. List of grantees supported by the community who also support your most favorite projects - get to know who you are missing!')
-tcol2.markdown('3. Grantees, if any, who are most similar to the grantees in the above two lists - you might like what they are up to!')
+tcol2.markdown('We\'re excited to offer you personalized recommendations to enhance your contribution experience. Here\'s what you can expect:')
+tcol2.markdown('1. **Cherished Allies:** Re-discover the grantees you\'ve supported in the past.')
+tcol2.markdown('2. **Community Favorites:** Explore grantees backed by the community who also champion your favorite projects.')
+tcol2.markdown('3. **Likeminded Visionaries:** We\'ll introduce you to grantees similar to those you\'ve previously supported or that align with community favorites. They\'re on missions you might find just as inspiring!')
 
 # Get address
 address = tcol2.text_input('Enter your Ethereum address below (starting "0x"):', 
@@ -71,7 +69,7 @@ if address and address != 'None':
                 'Round Name': ', '.join  # Join the combined project-round strings
             }).reset_index()
 
-            tcol2.markdown("#### 1. List of grantees who you have contributed in the past")
+            tcol2.markdown("#### 1. Cherished Allies: List of grantees who you have contributed in the past")
             tcol2.markdown("Here are the grantees whose payout address you have previously donated to. Show them some love again in this round!")
             
 
@@ -111,7 +109,7 @@ if address and address != 'None':
 
             top_projects_grouped_df.sort_values(by=['AmountUSD'])
 
-            tcol2.markdown("#### 2. Recommendations based on your donation history")
+            tcol2.markdown("#### 2. Community Favorites: Recommendations based on your donation history")
             
             #tcol2.dataframe(top_projects_grouped_df, column_config = {
             #    "ProjectRound": "Project (Round) Donated to",
@@ -157,8 +155,7 @@ if address and address != 'None':
             recommended_projects = recommended_addresses.merge(cr3_df[['PayoutAddress', 'Project Name', 'Application Link']].drop_duplicates(), on='PayoutAddress', how='left')
 
             #tcol2.dataframe(recommended_addresses, hide_index=True, use_container_width=True)
-            tcol2.markdown("This group of voters have previously supported a total of " + str(len(recommended_projects)) + " grantees participating in Citizens Retro #3 \
-                Here are the 5 most frequently contributed grantees by this group who you have never donated to.")
+            tcol2.markdown("Here are the 5 most frequently contributed grantees by the Gitcoin community who also support your most favorite projects.")
             
             tcol2.dataframe(recommended_projects.head(5),
                 column_config = {
@@ -169,18 +166,19 @@ if address and address != 'None':
                 hide_index=True, use_container_width=True)
 
             # Explaination
-            with tcol2.expander("How is this list of grantees derived?"):
-                st.markdown("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
+            with tcol2.expander("**See explanation**"):
+                st.markdown("We've analyzed your donation history on Grants Stack up to March 31st, 2024, focusing on your engagements with Gitcoin Grants and Community Rounds. \
+                            The result is the following curated list of your top 5 contributions, pinpointing where your support has been directed:")
                 
                 project_rounds = top_projects_grouped_df['ProjectRound'].tolist()
                 markdown_list = "\n".join(f"- {item}" for item in project_rounds)
                 st.markdown(markdown_list)
 
-                st.markdown("A total of " + str(len(unique_other_voters)) + " voters also support these projects you support the most. \
-                    This group of voters have previously supported a total of " + str(len(recommended_projects)) + " grantees participating in Citizens Retro #3 \
-                    The above list are the 5 most frequently contributed grantees by this group who you have never donated to.")
+                st.markdown("Interestingly, a community of " + str(len(unique_other_voters)) + " voters shares your passion, supporting the projects you value most. \
+                    These like-minded individuals have collectively backed " + str(len(recommended_projects)) + "  grantees featured in Citizens Retro #3.")
+                st.markdown("The list above showcases the top 5 grantees frequently supported by this community — ones you haven't contributed to yet. \
+                    This insight offers a unique perspective on where your interests align with the broader Gitcoin community, unveiling new opportunities for your future contributions.")
                 
-
             # Show cluster of projects distringuished by those already contributed before CR3, those recommended and others
             cluster_df = pd.read_csv('cluster_cr3_projects.csv')
             cluster_df['PayoutAddress'] = cluster_df['PayoutAddress'].str.lower()
@@ -267,9 +265,9 @@ if address and address != 'None':
             if len(close_projects_df) > 0:
 
                 # Display the updated DataFrame
-                tcol2.markdown('#### 3. Grantees who are most similar to the grantees in the above two lists')
+                tcol2.markdown('#### 3. Likeminded Visionaries: Grantees who are most similar to the grantees in the above two lists')
                 tcol2.markdown("So that you don't miss out on learning about new grantees or grantees outside your contribution network, \
-                here's a stab at listing most similar grantees to some of our recommendations above - you might like what they are up to:")
+                here's a stab at listing most similar grantees to some of our recommendations above - you might like what they are up to!")
 
                 tcol2.dataframe(close_projects_df,
                                 column_config = {
@@ -281,8 +279,8 @@ if address and address != 'None':
                                 column_order=("Project_3_Name", "Project_3_Short_Desc","Close_Project_12_Names", "Project_3_App_Link"),
                                 hide_index=True, use_container_width=True)  
 
-                with st.expander("How are simialr grantees determined?"):  
-                    tcol2.markdown("Technical Notes: Grantee descriptions are first converted into numerical vectors using a Sentence Transformer model. \
+                with st.expander("**See explanation**"):  
+                    st.markdown("Technical Notes: Grantee descriptions are first converted into numerical vectors using a Sentence Transformer model. \
                         Next, UMAP reduces this high-dimensional data to a two-dimensional space, maintaining the intrinsic relationships between grantees.\
                         Finally, the HDBSCAN algorithm clusters these projects based on their descriptions' similarities, \
                         identifying dense groups and distinguishing outliers, which helps in understanding the natural categorizations and thematic consistencies within the project dataset.")
