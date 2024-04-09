@@ -233,7 +233,7 @@ if address and address != 'None':
                 close_project_12_addresses = []
                 for _, project_12 in cluster_df[cluster_df['flag'].isin(['1', '2'])].iterrows():
                     distance = np.sqrt((project_3['UMAP_1'] - project_12['UMAP_1']) ** 2 + (project_3['UMAP_2'] - project_12['UMAP_2']) ** 2)
-                    if distance < 0.4:
+                    if distance < 0.35:
                         close_project_12_addresses.append(project_12['PayoutAddress'])
                 
                 # Add the collected data for this project_3 as a single tuple
