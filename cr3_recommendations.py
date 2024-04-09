@@ -72,7 +72,7 @@ if address and address != 'None':
             tcol2.markdown("#### 1. Cherished Allies: List of grantees who you have contributed in the past")
             tcol2.markdown("Here are the grantees whose payout address you have previously donated to. Show them some love again in this round!")
             
-
+            tcol2.caption("*Double-click on a row to read the entire text.*")
             tcol2.dataframe(matched_projects_df, hide_index=True, use_container_width=True,
                 column_order=("Project Name", "Short Project Desc", "Round Name", "Application Link"),   
                 column_config = {
@@ -157,6 +157,7 @@ if address and address != 'None':
             #tcol2.dataframe(recommended_addresses, hide_index=True, use_container_width=True)
             tcol2.markdown("Here are the 5 most frequently contributed grantees by the Gitcoin community who also support your most favorite projects.")
             
+            tcol2.caption("*Double-click on a row to read the entire text.*")
             tcol2.dataframe(recommended_projects.head(5),
                 column_config = {
                 "Project Name": "Project Name",
@@ -270,6 +271,7 @@ if address and address != 'None':
                 tcol2.markdown("So that you don't miss out on learning about new grantees or grantees outside your contribution network, \
                 here's a stab at listing most similar grantees to some of our recommendations above - you might like what they are up to!")
 
+                tcol2.caption("*Double-click on a row to read the entire text.*")
                 tcol2.dataframe(close_projects_df,
                                 column_config = {
                                 "Project_3_Name": "Grantee Name",
