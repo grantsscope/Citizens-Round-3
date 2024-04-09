@@ -172,7 +172,7 @@ if address and address != 'None':
                 hide_index=True, use_container_width=True)
 
             # Explaination
-            with tcol2.expander("How is this list of grantees derived?")
+            with tcol2.expander("How is this list of grantees derived?"):
                 tcol2.caption("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
                 
                 project_rounds = top_projects_grouped_df['ProjectRound'].tolist()
@@ -284,7 +284,7 @@ if address and address != 'None':
                                 column_order=("Project_3_Name", "Project_3_Short_Desc","Close_Project_12_Names", "Project_3_App_Link"),
                                 hide_index=True, use_container_width=True)  
 
-                with st.expander("How are simialr grantees determined?")  
+                with st.expander("How are simialr grantees determined?"):  
                     tcol2.caption("Technical Notes: Grantee descriptions are first converted into numerical vectors using a Sentence Transformer model. \
                         Next, UMAP reduces this high-dimensional data to a two-dimensional space, maintaining the intrinsic relationships between grantees.\
                         Finally, the HDBSCAN algorithm clusters these projects based on their descriptions' similarities, \
