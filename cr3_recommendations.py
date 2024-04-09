@@ -14,7 +14,7 @@ tcol2.markdown('### Get one-click personalized grantee recommendations using Gra
 tcol2.markdown('Dive into the [Gitcoin Citizens Retro Round](https://gitcoin.notion.site/Citizens-Retro-704a64ca7a874a1d97d94d48a05bb81f), designed to honor and reward the invaluable contributions of our citizens to the Gitcoin ecosystem. \
                 Contributions are welcome until **April 16th**, and we\'re excited to share that GrantsScope is among the grantees seeking retroactive support in this round. ')
 tcol2.markdown('Want to explore more about the round? Click [here](https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731)  for a deep dive. \
-                If GrantsScope\'s mission resonates with you, consider showing your support in the Gitcoin Citizens Round by contributing [here](https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731/57).')
+                If [GrantsScope\'s](https://grantsscope.xyz/) mission resonates with you, consider showing your support in the Gitcoin Citizens Round by contributing [here](https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731/57).')
 
 tcol2.markdown('We\'re excited to offer you personalized recommendations to enhance your contribution experience. Here\'s what you can expect:')
 tcol2.markdown('1. **Cherished Allies:** Re-discover the grantees you\'ve supported in the past.' + '\n' \
@@ -72,7 +72,7 @@ if address and address != 'None':
             tcol2.markdown("#### 1. Cherished Allies: List of grantees who you have contributed in the past")
             tcol2.markdown("Here are the grantees whose payout address you have previously donated to. Show them some love again in this round!")
             
-            tcol2.caption("*Double-click on a row to read the entire text.*")
+            tcol2.caption("*Double-click on a cell to read the entire text.*")
             tcol2.dataframe(matched_projects_df, hide_index=True, use_container_width=True,
                 column_order=("Project Name", "Short Project Desc", "Round Name", "Application Link"),   
                 column_config = {
@@ -157,7 +157,7 @@ if address and address != 'None':
             #tcol2.dataframe(recommended_addresses, hide_index=True, use_container_width=True)
             tcol2.markdown("Here are the 5 most frequently contributed grantees by the Gitcoin community who also support your most favorite projects.")
             
-            tcol2.caption("*Double-click on a row to read the entire text.*")
+            tcol2.caption("*Double-click on a cell to read the entire text.*")
             tcol2.dataframe(recommended_projects.head(5),
                 column_config = {
                 "Project Name": "Project Name",
@@ -233,7 +233,7 @@ if address and address != 'None':
                 close_project_12_addresses = []
                 for _, project_12 in cluster_df[cluster_df['flag'].isin(['1', '2'])].iterrows():
                     distance = np.sqrt((project_3['UMAP_1'] - project_12['UMAP_1']) ** 2 + (project_3['UMAP_2'] - project_12['UMAP_2']) ** 2)
-                    if distance < 0.35:
+                    if distance < 0.4:
                         close_project_12_addresses.append(project_12['PayoutAddress'])
                 
                 # Add the collected data for this project_3 as a single tuple
@@ -271,7 +271,7 @@ if address and address != 'None':
                 tcol2.markdown("So that you don't miss out on learning about new grantees or grantees outside your contribution network, \
                 here's a stab at listing most similar grantees to some of our recommendations above - you might like what they are up to!")
 
-                tcol2.caption("*Double-click on a row to read the entire text.*")
+                tcol2.caption("*Double-click on a cell to read the entire text.*")
                 tcol2.dataframe(close_projects_df,
                                 column_config = {
                                 "Project_3_Name": "Grantee Name",
