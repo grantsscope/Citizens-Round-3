@@ -17,9 +17,9 @@ tcol2.markdown('Want to explore more about the round? Click [here](https://explo
                 If GrantsScope\'s mission resonates with you, consider showing your support in the Gitcoin Citizens Round by contributing [here](https://explorer-v1.gitcoin.co/#/round/42161/0x5aa255d5cae9b6ce0f2d9aee209cb02349b83731/57).')
 
 tcol2.markdown('We\'re excited to offer you personalized recommendations to enhance your contribution experience. Here\'s what you can expect:')
-tcol2.markdown('1. **Cherished Allies:** Re-discover the grantees you\'ve supported in the past. \n \
-                2. **Community Favorites:** Explore grantees backed by the community who also champion your favorite projects. \n \
-                3. **Likeminded Visionaries:** We\'ll introduce you to grantees similar to those you\'ve previously supported or that align with community favorites. They\'re on missions you might find just as inspiring!')
+tcol2.markdown('1. **Cherished Allies:** Re-discover the grantees you\'ve supported in the past.' + '\n' \
+                '2. **Community Favorites:** Explore grantees backed by the community who also champion your favorite projects.' + '\n' \
+                '3. **Likeminded Visionaries:** We\'ll introduce you to grantees similar to those you\'ve previously supported or that align with community favorites. They\'re on missions you might find just as inspiring!')
 
 # Get address
 address = tcol2.text_input('Enter your Ethereum address below (starting "0x"):', 
@@ -163,7 +163,7 @@ if address and address != 'None':
                 "Short Project Desc": "Short Description",
                 "Application Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
                 },
-                column_order=("Project Name", "'Short Project Desc", "Application Link"),
+                column_order=("Project Name", "Short Project Desc", "Application Link"),
                 hide_index=True, use_container_width=True)
 
             # Explaination
