@@ -111,7 +111,7 @@ if address and address != 'None':
 
             top_projects_grouped_df.sort_values(by=['AmountUSD'])
 
-            tcol2.markdown("#### 2. List of grantees based on your donation history")
+            tcol2.markdown("#### 2. Recommendations based on your donation history")
             
             #tcol2.dataframe(top_projects_grouped_df, column_config = {
             #    "ProjectRound": "Project (Round) Donated to",
@@ -170,13 +170,13 @@ if address and address != 'None':
 
             # Explaination
             with tcol2.expander("How is this list of grantees derived?"):
-                tcol2.caption("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
+                tcol2.markdown("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
                 
                 project_rounds = top_projects_grouped_df['ProjectRound'].tolist()
                 markdown_list = "\n".join(f"- {item}" for item in project_rounds)
-                tcol2.caption(markdown_list)
+                tcol2.markdown(markdown_list)
 
-                tcol2.caption("A total of " + str(len(unique_other_voters)) + " voters also support these projects you support the most. \
+                tcol2.markdown("A total of " + str(len(unique_other_voters)) + " voters also support these projects you support the most. \
                     This group of voters have previously supported a total of " + str(len(recommended_projects)) + " grantees participating in Citizens Retro #3 \
                     The above list are the 5 most frequently contributed grantees by this group who you have never donated to.")
                 
@@ -282,7 +282,7 @@ if address and address != 'None':
                                 hide_index=True, use_container_width=True)  
 
                 with st.expander("How are simialr grantees determined?"):  
-                    tcol2.caption("Technical Notes: Grantee descriptions are first converted into numerical vectors using a Sentence Transformer model. \
+                    tcol2.markdown("Technical Notes: Grantee descriptions are first converted into numerical vectors using a Sentence Transformer model. \
                         Next, UMAP reduces this high-dimensional data to a two-dimensional space, maintaining the intrinsic relationships between grantees.\
                         Finally, the HDBSCAN algorithm clusters these projects based on their descriptions' similarities, \
                         identifying dense groups and distinguishing outliers, which helps in understanding the natural categorizations and thematic consistencies within the project dataset.")
