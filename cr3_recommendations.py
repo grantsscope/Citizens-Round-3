@@ -170,13 +170,13 @@ if address and address != 'None':
 
             # Explaination
             with tcol2.expander("How is this list of grantees derived?"):
-                tcol2.markdown("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
+                st.markdown("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
                 
                 project_rounds = top_projects_grouped_df['ProjectRound'].tolist()
                 markdown_list = "\n".join(f"- {item}" for item in project_rounds)
-                tcol2.markdown(markdown_list)
+                st.markdown(markdown_list)
 
-                tcol2.markdown("A total of " + str(len(unique_other_voters)) + " voters also support these projects you support the most. \
+                st.markdown("A total of " + str(len(unique_other_voters)) + " voters also support these projects you support the most. \
                     This group of voters have previously supported a total of " + str(len(recommended_projects)) + " grantees participating in Citizens Retro #3 \
                     The above list are the 5 most frequently contributed grantees by this group who you have never donated to.")
                 
