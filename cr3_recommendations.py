@@ -125,9 +125,6 @@ if address and address != 'None':
             other_voters = gs_donations_df[gs_donations_df['PayoutAddress'].isin(top_addresses['PayoutAddress']) & (gs_donations_df['Voter'] != address)]
             unique_other_voters = other_voters['Voter'].drop_duplicates()
 
-            # Debugging
-            tcol2.markdown()
-
             #Step 3: Find top citizen round 3 projects supported by other voters
             # Find projects supported by other voters
             filtered_by_voters = gs_donations_df[gs_donations_df['Voter'].isin(unique_other_voters)]
