@@ -112,12 +112,7 @@ if address and address != 'None':
             top_projects_grouped_df.sort_values(by=['AmountUSD'])
 
             tcol2.markdown("#### 2. List of grantees based on your donation history")
-            tcol2.markdown("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
             
-            project_rounds = top_projects_grouped_df['ProjectRound'].tolist()
-            markdown_list = "\n".join(f"- {item}" for item in project_rounds)
-            tcol2.markdown(markdown_list)
-
             #tcol2.dataframe(top_projects_grouped_df, column_config = {
             #    "ProjectRound": "Project (Round) Donated to",
             #    "AmountUSD": st.column_config.NumberColumn("Total Donations (in USD)", step = 1, format = "$%d")
@@ -131,7 +126,7 @@ if address and address != 'None':
             unique_other_voters = other_voters['Voter'].drop_duplicates()
 
             # Debugging
-            tcol2.markdown("A total of " + str(len(unique_other_voters)) + " voters also support the projects you support the most.")
+            tcol2.markdown()
 
             #Step 3: Find top citizen round 3 projects supported by other voters
             # Find projects supported by other voters
@@ -175,6 +170,19 @@ if address and address != 'None':
                 },
                 column_order=("Project Name", "Application Link"),
                 hide_index=True, use_container_width=True)
+
+            # Explaination
+            with tcol2.expander("How is this list of grantees derived?")
+                tcol2.caption("We scanned your entire donation history on Grants Stack through March 31st 2024 for Gitcoin Grants and Community Rounds. Here are your top 5 contributions based on the Payout Address you have contributed to:")
+                
+                project_rounds = top_projects_grouped_df['ProjectRound'].tolist()
+                markdown_list = "\n".join(f"- {item}" for item in project_rounds)
+                tcol2.caption(markdown_list)
+
+                tcol2.caption("A total of " + str(len(unique_other_voters)) + " voters also support these projects you support the most. \
+                    This group of voters have previously supported a total of " + str(len(recommended_projects)) + " grantees participating in Citizens Retro #3 \
+                    The above list are the 5 most frequently contributed grantees by this group who you have never donated to.")
+                
 
             # Show cluster of projects distringuished by those already contributed before CR3, those recommended and others
             cluster_df = pd.read_csv('cluster_cr3_projects.csv')
@@ -274,18 +282,25 @@ if address and address != 'None':
                                 "Project_3_App_Link": st.column_config.LinkColumn(label = "Application Detail", display_text = "Open Application")
                                 },
                                 column_order=("Project_3_Name", "Project_3_Short_Desc","Close_Project_12_Names", "Project_3_App_Link"),
-                                hide_index=True, use_container_width=True)    
+                                hide_index=True, use_container_width=True)  
 
-                fig = px.scatter(cluster_df, x='UMAP_1', y='UMAP_2', color='flag',
-                     text='Project Name', 
-                     hover_data={'UMAP_1': False, 'UMAP_2': False, 'Project Name': False, 'Short Project Desc': True, 'Cluster': False},
-                     title='Visual Landscape of Gitcoin Citizens Retro #3 Projects',
-                     color_discrete_map=color_map,
-                     width=1200, 
-                     height=900)
+                with st.expander("How are simialr grantees determined?")  
+                    tcol2.caption("Technical Notes: Grantee descriptions are first converted into numerical vectors using a Sentence Transformer model. \
+                        Next, UMAP reduces this high-dimensional data to a two-dimensional space, maintaining the intrinsic relationships between grantees.\
+                        Finally, the HDBSCAN algorithm clusters these projects based on their descriptions' similarities, \
+                        identifying dense groups and distinguishing outliers, which helps in understanding the natural categorizations and thematic consistencies within the project dataset.")
+
+
+                #fig = px.scatter(cluster_df, x='UMAP_1', y='UMAP_2', color='flag',
+                #     text='Project Name', 
+                #     hover_data={'UMAP_1': False, 'UMAP_2': False, 'Project Name': False, 'Short Project Desc': True, 'Cluster': False},
+                #     title='Visual Landscape of Gitcoin Citizens Retro #3 Projects',
+                #     color_discrete_map=color_map,
+                #     width=1200, 
+                #     height=900)
 
                 # Update layout to ensure text labels are displayed nicely
-                fig.update_traces(textposition='top center')
+                #fig.update_traces(textposition='top center')
 
-                st.plotly_chart(fig, use_container_width=True)
+                #st.plotly_chart(fig, use_container_width=True)
 
