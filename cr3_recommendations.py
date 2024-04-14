@@ -289,16 +289,17 @@ if address and address != 'None':
                         identifying dense groups and distinguishing outliers, which helps in understanding the natural categorizations and thematic consistencies within the project dataset.")
 
 
-                #fig = px.scatter(cluster_df, x='UMAP_1', y='UMAP_2', color='flag',
-                #     text='Project Name', 
-                #     hover_data={'UMAP_1': False, 'UMAP_2': False, 'Project Name': False, 'Short Project Desc': True, 'Cluster': False},
-                #     title='Visual Landscape of Gitcoin Citizens Retro #3 Projects',
-                #     color_discrete_map=color_map,
-                #     width=1200, 
-                #     height=900)
+                tcol2.markdown("*If you are seeing this, we are testing something*")
+                fig = px.scatter(cluster_df, x='UMAP_1', y='UMAP_2', color='flag',
+                     text='Project Name', 
+                     hover_data={'UMAP_1': False, 'UMAP_2': False, 'Project Name': False, 'Short Project Desc': True, 'Cluster': False},
+                     title='Visual Landscape of Gitcoin Citizens Retro #3 Projects',
+                     color_discrete_map=color_map,
+                     width=1200, 
+                     height=900)
 
                 # Update layout to ensure text labels are displayed nicely
-                #fig.update_traces(textposition='top center')
+                fig.update_traces(textposition='top center')
 
-                #st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True)
 
